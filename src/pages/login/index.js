@@ -3,6 +3,11 @@ import {Card, Form, Icon, Input, Button, Checkbox, message} from 'antd'
 import http from '@/plugins/axios'
 import {deepcopy} from '@/libs/utils'
 import jsCookie from 'js-cookie'
+// 引入提示语言包
+import LanguagePack from '@/libs/locale-provider/zh_CN'
+// import LanguagePack from '@/libs/locale-provider/en_US'
+// 登录的提示包
+const LoginPack = LanguagePack.login
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -16,11 +21,13 @@ class Login extends Component {
       rememberMe: true,
       loginLoading: false,
     }
+
     this.loginUrl = 'web/sys/user/login'
     this.getAuth = 'web/sys/perm/shiro/vue'
-    this.loginErrTxt = '您的用户名或密码输入错误，请重新输入'
-    this.noAuthTxt = '对不起，您暂时无权访问本系统，请联系管理员给您进行授权'
-    
+    this.loginErrTxt = LoginPack.error
+    this.noAuthTxt = LoginPack.noAuth
+    this.loginSuccess = LoginPack.success
+
     this.submitLogin = this.submitLogin.bind(this)
     this.updateRememberMe = this.updateRememberMe.bind(this)
   }
@@ -77,6 +84,7 @@ class Login extends Component {
               if(res2.code==1){
                 // 授权成功
                 var {history} = vm.props
+                message.success(vm.loginSuccess)
                 history.push('/common')
               }else{
                 message.error(vm.noAuthTxt)
