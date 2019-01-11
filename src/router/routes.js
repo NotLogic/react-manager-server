@@ -4,6 +4,7 @@ import pathMap from '@/router/pathMap'
 
 
 import Login from '@/pages/login'
+import App from '@/app'
 import NoMatch from '@/pages/404'
 // import Common from '@/components/common'
 // import Home from '@/pages/home'
@@ -27,7 +28,7 @@ import QueryParams from '@/pages/study/queryParams'
 const keys = Object.keys(pathMap) 
 const routes = (
   <Switch>
-    <Route path="/" exact component={Login}></Route>
+    <Route path="/" exact component={App}></Route>
     {/* 学习 */}
     <Route path="/queryParams" component={QueryParams}></Route>
     <Route path="/staticRouterContext" component={StaticRouterContext}></Route>

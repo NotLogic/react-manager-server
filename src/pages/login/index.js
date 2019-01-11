@@ -57,7 +57,7 @@ class Login extends Component {
   skipLogin(){
     let {history} = this.props
     message.success(this.loginSuccess)
-    history.push('/common')
+    history.push('/home')
   }
 
   submitLogin(e){

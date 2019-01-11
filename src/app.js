@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Layout} from 'antd'
 import SideMenu from '@/components/menu'
-
+import Routes from '@/router/routes2'
 const {Header, Footer, Sider, Content} = Layout
 
 export default class Common extends Component {
@@ -23,7 +23,7 @@ export default class Common extends Component {
             <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>Header</Header>
             <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
               {/* 怎么在这里控制渲染不同的页面 */}
-              
+              <Routes></Routes>
             </Content>
             <Footer style={{backgroundColor: '#f5f7f9',textAlign: 'center' }}>Copyright © 深圳市拉呱科技有限公司版权所有</Footer>
           </Layout>

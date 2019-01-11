@@ -92,7 +92,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // 覆写代理
     serverConfig.proxy = {
       '/apis': {
-        target: '',  //  后端ip
+        target: 'http://10.0.0.12:8086',  //  后端ip
         changeOrigin: true,
         pathRewrite: {
           '^/apis': '/'
