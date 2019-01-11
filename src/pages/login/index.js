@@ -44,8 +44,8 @@ class Login extends Component {
   }
 
   savePassword(data){
-    var vm = this
-    var {rememberMe} = vm.state
+    let vm = this
+    let {rememberMe} = vm.state
     if(rememberMe){
       sessionStorage.lu = JSON.stringify(data)
       localStorage.lu = JSON.stringify(data)
@@ -54,36 +54,44 @@ class Login extends Component {
     }
   }
 
+  skipLogin(){
+    let {history} = this.props
+    message.success(this.loginSuccess)
+    history.push('/common')
+  }
+
   submitLogin(e){
     e.preventDefault()
-    var vm = this
+    let vm = this
     vm.props.form.validateFields((err, values) => {
       if(!err){
-        // values 表单中绑定的name组成的对象
-        // vm.setState({
-        //   loginLoading: true
-        // })
-        var ajaxData = deepcopy(values)
+        // save password
+        vm.savePassword(values)
+        vm.skipLogin()
+        return
+        vm.setState({
+          loginLoading: true
+        })
+        let ajaxData = deepcopy(values)
         ajaxData.loginPass = window.hex_md5(ajaxData.loginPass)
-        var loginParams = {
+        let loginParams = {
           method: 'post',
           url: vm.loginUrl,
           params: ajaxData
         }
-        vm.savePassword(values)
         http(loginParams).then(function(res){
           if(res.code==1){
             let { sessionId, sysUser } = res.data
             sessionStorage.sysUser = JSON.stringify(sysUser)
             jsCookie.set('JSESSIONID',sessionId,{ path: '' })
-            var authParms = {
+            let authParms = {
               method: 'post',
               url: vm.getAuth,
             }
             http(authParms).then(function(res2){
               if(res2.code==1){
                 // 授权成功
-                var {history} = vm.props
+                let {history} = vm.props
                 message.success(vm.loginSuccess)
                 history.push('/common')
               }else{
@@ -110,29 +118,29 @@ class Login extends Component {
       <div className="login-wrapper">
         <div className="login-main">
           <Card
-            title="登录"
+            title={LoginPack.title}
           >
             <Form onSubmit={this.submitLogin}>
               <Form.Item>
                 {getFieldDecorator('loginName', {
-                  rules: [{required: true,message: '请输入您的账号'}]
+                  rules: [{required: true,message: LoginPack.usernameNull}]
                 })(
-                  <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="账号" />
+                  <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={LoginPack.usernamePlaceholder} />
                 )}
               </Form.Item>
               <Form.Item>
                 {
                   getFieldDecorator('loginPass', {
-                    rules: [{required: true,message: '请输入您的密码'}]
+                    rules: [{required: true,message: LoginPack.passwordNull}]
                   })(
-                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.submitLogin} placeholder="密码" type="password" />
+                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.submitLogin} placeholder={LoginPack.passwordPlaceholder} type="password" />
                   )
                 }
               </Form.Item>
               <Form.Item>
-                <Checkbox checked={this.state.rememberMe} onChange={this.updateRememberMe}><span className="tips-text">记住密码</span></Checkbox>
+                <Checkbox checked={this.state.rememberMe} onChange={this.updateRememberMe}><span className="tips-text">{LoginPack.rememberMe}</span></Checkbox>
               </Form.Item>
-              <Button type="primary" disabled={hasErrors(getFieldsError())} loading={this.state.loginLoading} htmlType="submit" block>登录</Button>
+              <Button type="primary" disabled={hasErrors(getFieldsError())} loading={this.state.loginLoading} htmlType="submit" block>{LoginPack.button}</Button>
             </Form>
           </Card>
         </div>
