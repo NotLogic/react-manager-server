@@ -1,10 +1,12 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {Layout} from 'antd'
 import SideMenu from '@/components/menu'
-import Routes from '@/router/routes2'
+import {Route, Switch} from 'react-router'
+// import {study} from '@/router/config'
+
 const {Header, Footer, Sider, Content} = Layout
 
-export default class Common extends Component {
+export default class Common extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -13,6 +15,7 @@ export default class Common extends Component {
   }
 
   render () {
+    console.log('props: ',this.props)
     return (
       <div style={{position: 'fixed',left: 0,right: 0,top: 0,bottom: 0}} >
         <Layout style={{ minHeight: '100vh'}}>
@@ -22,8 +25,16 @@ export default class Common extends Component {
           <Layout>
             <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>Header</Header>
             <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
-              {/* 怎么在这里控制渲染不同的页面 */}
-              <Routes></Routes>
+              如何在这里渲染不同的页面呢呢呢？？？
+              {/* 这样写为什么无法渲染呢 */}
+              {/* {Object.keys(study).map(key => {
+                console.log('study[key]: ',study[key])
+                return <Route
+                          key={key}
+                          path={study[key].path}
+                          component={study[key].component}
+                        ></Route>
+              })} */}
             </Content>
             <Footer style={{backgroundColor: '#f5f7f9',textAlign: 'center' }}>Copyright © 深圳市拉呱科技有限公司版权所有</Footer>
           </Layout>

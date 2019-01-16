@@ -1,4 +1,3 @@
-"use strict";
 import axios from "axios";
 import { Modal, message } from 'antd';
 // Full config:  https://github.com/axios/axios#request-config
@@ -29,10 +28,10 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   function(response) {
     // 请求成功，只返回获取的数据
-    if(response && response.status == 200){
+    if(response && response.status === 200){
       // 登录超时，提示进行重新登录
       // 请求成功，但返回的数据中状态码为-1，重新登录
-      if(response.data && response.data.code == -1){
+      if(response.data && response.data.code === -1){
         Modal.confirm({
           title: '登录超时',
           content: '请点击确定前往登录页进行重新登录',

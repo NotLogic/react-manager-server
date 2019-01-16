@@ -1,30 +1,35 @@
-// import必须在最上部，不可以在执行其他语句后import文件
+// import必须在最顶部，import语句执行完才可以执行其他语句
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// antd
 import 'antd/dist/antd.css';
+import {LocaleProvider} from 'antd'  //  国际化
+import zhCN from 'antd/lib/locale-provider/zh_CN';   //  国际化
+
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+
 // 引入 window.fetch polyfill
 import 'whatwg-fetch' 
 
-// antd国际化
-import {LocaleProvider} from 'antd'
-import zhCN from 'antd/lib/locale-provider/zh_CN';
-
 // 路由
-// import MyRouter from '@/router'
 import {BrowserRouter as Router} from 'react-router-dom'
 import routes from '@/router/routes'
-// console.log('MyRouter: ',MyRouter)
+
 // 状态管理
+import { Provider } from 'react-redux'
+import store from './redux'
+console.log('state: ',store.getState())
 
 ReactDOM.render((
-  <LocaleProvider locale={zhCN}>
-    <Router>
-      {routes}
-    </Router>
-  </LocaleProvider>
-  // <MyRouter />
+  <Provider store={store}>
+    <LocaleProvider locale={zhCN}>
+      <Router>
+        {routes}
+      </Router>
+    </LocaleProvider>
+  </Provider>
   ), document.getElementById('root')
 );
 

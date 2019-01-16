@@ -15,15 +15,15 @@ export function isString (data) {
   return typeof data === 'string' ? true : false
 }
 export function isNullObj (obj) {
-  if(typeof obj != 'object') return false
-  if(typeof obj.length == 'undefined'){
+  if(obj instanceof Object){
     for(var key in obj){
       return false
     }
     return true
-  }else{
-    return obj.length == 0 ? true : false
+  }else if(obj instanceof Object && obj.length > 0){
+    return true
   }
+  return false
 }
 // 去除数组中字符串元素的首尾空格
 export function trimArray (arr) {
@@ -147,16 +147,16 @@ export function getProvinceCityArea(addressCodeArr, chinaJson, getAll) {
     areaTxt = '',
     returnTxt = '',
     len = addressCodeArr.length
-  if (len == 3) {
+  if (len === 3) {
     provinceTxt = chinaJson['100000'][addressCodeArr[0]]
     cityTxt = chinaJson[addressCodeArr[0]][addressCodeArr[1]]
     areaTxt = chinaJson[addressCodeArr[1]][addressCodeArr[2]]
     returnTxt = getAll ? provinceTxt + cityTxt + areaTxt : areaTxt
-  } else if (len == 2) {
+  } else if (len === 2) {
     provinceTxt = chinaJson['100000'][addressCodeArr[0]]
     cityTxt = chinaJson[addressCodeArr[0]][addressCodeArr[1]]
     returnTxt = getAll ? provinceTxt + cityTxt : cityTxt
-  } else if(len == 1){
+  } else if(len === 1){
     returnTxt = chinaJson['100000'][addressCodeArr[0]]
   }else{
     returnTxt = ''
@@ -164,94 +164,6 @@ export function getProvinceCityArea(addressCodeArr, chinaJson, getAll) {
   return returnTxt
 }
 
-// 将扁平的无序的无限分类数据整理成：
-// “多维树状（data.unflat）”和“扁平树状（data.flat）”两种数据
-export function genTreeData (data, opt) {
-    var opt = opt || { idField: 'id', parentField: 'pid', textField: 'name' };
-    var idField, textField, parentField, tmpMap = {};
-    idField = opt.idField || 'id';
-    textField = opt.textField || 'name';
-    var unflatten = function () {
-      if (opt.parentField) {
-        parentField = opt.parentField;
-        var i, l, treeData = [];
-        for (i = 0, l = data.length; i < l; i++) {
-          data[i].label = data[i][textField];
-          data[i].value = data[i][idField];
-          tmpMap[data[i][idField]] = data[i];
-        }
-        for (i = 0, l = data.length; i < l; i++) {
-          if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-            if (!tmpMap[data[i][parentField]]['children']) {
-              tmpMap[data[i][parentField]]['children'] = [];
-            }
-            data[i]['text'] = data[i][textField];
-            var hasEle = (function () {
-              var ret = false;
-              tmpMap[data[i][parentField]]['children'].forEach(ele=> {
-                if (ele[idField] == data[i][idField]) {
-                  ret = true;
-                  return false;
-                }
-              })
-              return ret;
-            })();
-            if (hasEle == false) {
-              tmpMap[data[i][parentField]]['children'].push(data[i]);
-            }
-          } else {
-            data[i]['text'] = data[i][textField];
-            treeData.push(data[i]);
-          }
-        }
-        return treeData;
-      }
-      return data;
-    };
-    // console.log('转换为Select处理的数据unflatten(): ',unflatten())
-    var flatten = function () {
-      var arr = [];
-      var flattenIt = function (data, _level) {
-        for (var i = 0; i < data.length; i++) {
-          var _levelSub = _level + 1;
-          var ele = tmpMap[data[i][idField]];
-          ele.level = _level;
-          arr.push(ele);
-          if ('children' in data[i] && data[i].children.length > 0) {
-            flattenIt(data[i].children, _levelSub);
-          }
-        }
-      };
-      flattenIt(unflatten(), 0);
-      return arr;
-    };
-    return {
-      flat: flatten(),
-      unflat: unflatten()
-    };
-}
-
-// 处理扁平树状数据，为iview的 Select组件 使用
-export function formatSelectData (arr) {
-  var _arr = [];
-  arr.forEach(ele => {
-    var _objItem = {};
-    var label = ele.name || '';
-    var nullStr = '　　';
-    if (typeof(ele.level) != 'undefined' && isNaN(ele.level) == false) {
-        // 生成多个全角空格
-        label = str_repeat(nullStr, ele.level)  + label;
-    }
-    _objItem = {
-        label: label,
-        value: String(ele.id),
-        id: String(ele.id),
-        pId: ele.pId || ''
-    };
-    _arr.push(_objItem);
-  })
-  return _arr;
-}
 
 export function str_repeat (str, num) {
   return new Array(num + 1).join(str);
@@ -262,7 +174,7 @@ export function timestampToTime(timestamp) {
     return timestamp
   }
   var timeStr = '' + timestamp;
-  var myTimestamp = timeStr.length == 10 ? timestamp*1000 : timestamp;
+  var myTimestamp = timeStr.length === 10 ? timestamp*1000 : timestamp;
   var date = new Date(myTimestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
   var Y = date.getFullYear() + '-';
   var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
@@ -296,7 +208,7 @@ export function isIOS9 () {
 }
 export function isWeiXin (){
   var ua = window.navigator.userAgent.toLowerCase();
-  return ua.indexOf('micromessenger') != -1 ? true : false
+  return ua.indexOf('micromessenger') !== -1 ? true : false
 }
 export function isIos(){
   var ua = window.navigator.userAgent.toLowerCase();
@@ -386,7 +298,7 @@ export function getNongLi(_date,format){
       return (m >> n) & 1;
     }
     function e2c() {
-      TheDate = (arguments.length != 3) ? new Date() : new Date(arguments[0], arguments[1], arguments[2]);
+      TheDate = (arguments.length !== 3) ? new Date() : new Date(arguments[0], arguments[1], arguments[2]);
       var total, m, n, k;
       var isEnd = false;
       var tmp = TheDate.getYear();
@@ -395,7 +307,7 @@ export function getNongLi(_date,format){
       }
       total = (tmp - 1921) * 365 + Math.floor((tmp - 1921) / 4) + madd[TheDate.getMonth()] + TheDate.getDate() - 38;
 
-      if (TheDate.getYear() % 4 == 0 && TheDate.getMonth() > 1) {
+      if (TheDate.getYear() % 4 === 0 && TheDate.getMonth() > 1) {
         total++;
       }
       for (m = 0; ; m++) {
@@ -411,8 +323,8 @@ export function getNongLi(_date,format){
       cYear = 1921 + m;
       cMonth = k - n + 1;
       cDay = total;
-      if (k == 12) {
-        if (cMonth == Math.floor(CalendarData[m] / 0x10000) + 1) {
+      if (k === 12) {
+        if (cMonth === Math.floor(CalendarData[m] / 0x10000) + 1) {
           cMonth = 1 - cMonth;
         }
         if (cMonth > Math.floor(CalendarData[m] / 0x10000) + 1) {
@@ -436,7 +348,7 @@ export function getNongLi(_date,format){
       }
       tmp += "月";
       tmp += (cDay < 11) ? "初" : ((cDay < 20) ? "十" : ((cDay < 30) ? "廿" : "三十"));
-      if (cDay % 10 != 0 || cDay == 10) {
+      if (cDay % 10 !== 0 || cDay === 10) {
         tmp += numString.charAt((cDay - 1) % 10);
       }
       return tmp;
@@ -488,7 +400,7 @@ export function dateFtt(fmt,date){
     fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));   
   for(var k in o)   
     if(new RegExp("("+ k +")").test(fmt))   
-  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length===1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
 }
 // export function 
