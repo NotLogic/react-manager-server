@@ -20,7 +20,6 @@ import routes from '@/router/routes'
 // 状态管理
 import { Provider } from 'react-redux'
 import store from './redux'
-console.log('state: ',store.getState())
 
 ReactDOM.render((
   <Provider store={store}>

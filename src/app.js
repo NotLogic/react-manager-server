@@ -1,6 +1,7 @@
 import React from 'react'
 import {Layout} from 'antd'
 import SideMenu from '@/components/menu'
+import MyHeader from '@/components/header'
 import {Route, Switch} from 'react-router'
 // import {study} from '@/router/config'
 
@@ -23,7 +24,9 @@ export default class Common extends React.Component {
             <SideMenu menuData={this.state.menuData}></SideMenu>
           </Sider>
           <Layout>
-            <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>Header</Header>
+            <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>
+              <MyHeader></MyHeader>
+            </Header>
             <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
               如何在这里渲染不同的页面呢呢呢？？？
               {/* 这样写为什么无法渲染呢 */}

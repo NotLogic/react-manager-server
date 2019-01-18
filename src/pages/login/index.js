@@ -1,8 +1,13 @@
 import React, {Component} from 'react'
+import { bindActionCreators } from 'redux'
+import {connect} from 'react-redux'
+import { submitLogin } from '@/redux/actions'
 import {Card, Form, Icon, Input, Button, Checkbox, message} from 'antd'
 import http from '@/plugins/axios'
 import {deepcopy} from '@/libs/utils'
 import jsCookie from 'js-cookie'
+import md5 from 'md5'
+
 // 引入提示语言包
 import LanguagePack from '@/libs/locale-provider/zh_CN'
 // import LanguagePack from '@/libs/locale-provider/en_US'
@@ -19,16 +24,16 @@ class Login extends Component {
     super(props)
     this.state = {
       rememberMe: true,
-      loginLoading: false,
     }
 
     this.loginUrl = 'web/sys/user/login'
     this.getAuth = 'web/sys/perm/shiro/vue'
+    this.sessionKey = 'JSESSIONID'
     this.loginErrTxt = LoginPack.error
     this.noAuthTxt = LoginPack.noAuth
     this.loginSuccess = LoginPack.success
 
-    this.submitLogin = this.submitLogin.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.updateRememberMe = this.updateRememberMe.bind(this)
   }
   
@@ -55,23 +60,45 @@ class Login extends Component {
   }
 
   skipLogin(){
-    let {history} = this.props
-    message.success(this.loginSuccess)
-    history.push('/home')
+    let vm = this
+    let {history} = vm.props
+    setTimeout(function(){
+      message.success(vm.loginSuccess)
+      history.push('/home')
+    }, 500)
   }
 
-  submitLogin(e){
+  storeLogin(submitForm) {
+    const vm = this
+    const {submitLogin, history} = vm.props
+    let ajaxData = deepcopy(submitForm)
+    ajaxData.loginPass = md5(ajaxData.loginPass)
+    let loginParams = {
+      method: 'post',
+      url: vm.loginUrl,
+      params: ajaxData,
+    }
+    let authParams = {
+      method: 'post',
+      url: vm.getAuth
+    }
+    // 
+    submitLogin(loginParams, authParams, vm.sessionKey)
+    setTimeout(function(){
+      history.push('/')
+    },1000)
+  }
+
+  handleSubmit(e){
     e.preventDefault()
     let vm = this
     vm.props.form.validateFields((err, values) => {
       if(!err){
         // save password
         vm.savePassword(values)
-        vm.skipLogin()
+        // vm.skipLogin()
+        vm.storeLogin(values)        
         return
-        vm.setState({
-          loginLoading: true
-        })
         let ajaxData = deepcopy(values)
         ajaxData.loginPass = window.hex_md5(ajaxData.loginPass)
         let loginParams = {
@@ -113,19 +140,20 @@ class Login extends Component {
   }
 
   render () {
-    const {getFieldDecorator, getFieldsError} = this.props.form
+    const {form, login: loginState} = this.props
+    const {getFieldDecorator, getFieldsError} = form
     return (
       <div className="login-wrapper">
         <div className="login-main">
           <Card
             title={LoginPack.title}
           >
-            <Form onSubmit={this.submitLogin}>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Item>
                 {getFieldDecorator('loginName', {
                   rules: [{required: true,message: LoginPack.usernameNull}]
                 })(
-                  <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={LoginPack.usernamePlaceholder} />
+                  <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.handleSubmit} placeholder={LoginPack.usernamePlaceholder} />
                 )}
               </Form.Item>
               <Form.Item>
@@ -133,14 +161,14 @@ class Login extends Component {
                   getFieldDecorator('loginPass', {
                     rules: [{required: true,message: LoginPack.passwordNull}]
                   })(
-                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.submitLogin} placeholder={LoginPack.passwordPlaceholder} type="password" />
+                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.handleSubmit} placeholder={LoginPack.passwordPlaceholder} type="password" />
                   )
                 }
               </Form.Item>
               <Form.Item>
                 <Checkbox checked={this.state.rememberMe} onChange={this.updateRememberMe}><span className="tips-text">{LoginPack.rememberMe}</span></Checkbox>
               </Form.Item>
-              <Button type="primary" disabled={hasErrors(getFieldsError())} loading={this.state.loginLoading} htmlType="submit" block>{LoginPack.button}</Button>
+              <Button type="primary" disabled={hasErrors(getFieldsError())} loading={loginState.isLogining} htmlType="submit" block>{LoginPack.button}</Button>
             </Form>
           </Card>
         </div>
@@ -148,5 +176,23 @@ class Login extends Component {
     );
   }
 }
-const LoginForm = Form.create({name: 'login-form'})(Login)
-export default LoginForm
+// 登录组件不需要监听state变化
+const mapStateToProps = state => {
+  return {
+    login: state.login
+  }
+}
+
+// 如果传递的是一个对象，那么每个定义在该对象的函数都将被当作 Redux action creator，
+// 对象所定义的方法名将作为属性名；每个方法将返回一个新的函数，
+// 函数中dispatch方法会将action creator的返回值作为参数执行。这些属性会被合并到组件的 props 中。
+// const mapDispatchToProps = dispatch => ({
+  
+// })
+const mapDispatchToProps = {
+  submitLogin
+}
+
+// connect 连接组件类与Redux store  文档 https://www.redux.org.cn/docs/react-redux/api.
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(Login))

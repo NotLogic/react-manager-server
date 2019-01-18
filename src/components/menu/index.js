@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {Menu} from 'antd'
+import {connect} from 'react-redux'
 
 
-export default class SideMenu extends Component {
+class SideMenu extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -11,7 +12,8 @@ export default class SideMenu extends Component {
   }
 
   render () {
-    const {menuData} = this.props
+    const {menuData, login} = this.props
+    console.log('菜单 login: ',login)
     console.log('menuData: ',menuData)
     return (
       <Menu mode="inline" theme="dark">
@@ -22,3 +24,8 @@ export default class SideMenu extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  login: state.login
+})
+
+export default connect(mapStateToProps)(SideMenu)
