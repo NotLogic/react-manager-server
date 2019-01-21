@@ -16,6 +16,7 @@ export default class Common extends React.Component {
   }
 
   render () {
+    const {history} = this.props
     return (
       <div style={{position: 'fixed',left: 0,right: 0,top: 0,bottom: 0}} >
         <Layout style={{ minHeight: '100vh'}}>
@@ -24,7 +25,7 @@ export default class Common extends React.Component {
           </Sider>
           <Layout>
             <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>
-              <MyHeader></MyHeader>
+              <MyHeader history={history}></MyHeader>
             </Header>
             <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
               如何在这里渲染不同的页面呢呢呢？？？

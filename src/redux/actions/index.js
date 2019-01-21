@@ -58,6 +58,25 @@ function isLogined ({ isLogining, sessionId, sysUser, menuList, permissionList }
   return action
 }
 
+export const submitLogout = (params) => dispatch => {
+  return new Promise(function(resolve, reject){
+    http(params).then(res=>{
+      if(res.code==1){
+        dispatch(logout)
+        resolve(res)
+      }else{
+        reject({message: '退出失败'})
+      }
+    }).catch(err=>reject(err))
+  })
+}
+
+function logout () {
+  let action = {
+    type: types.LOGOUT
+  }
+  return action
+}
 export default {
 
 }

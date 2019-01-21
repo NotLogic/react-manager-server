@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import {submitLogout} from '@/redux/actions'
 import { Row, Col, Menu, Dropdown, Icon, Modal, Form, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import {sysUserKey} from '@/libs/config'
-import http from '@/plugins/axios'
 
 const DropdownMenu = handleMenuClick => (
   <Menu onClick={handleMenuClick} >
@@ -65,10 +66,13 @@ class MyHeader extends React.Component {
       modalShow: false,
       submitLoading: false
     }
+    this.logoutUrl = 'web/sys/user/quit'
+    this.modifyPassword = 'web/sys/user/update'
 
     this.handleMenuClick = this.handleMenuClick.bind(this)
     this.resetModal = this.resetModal.bind(this)
     this.submitModal = this.submitModal.bind(this)
+    this.logout = this.logout.bind(this)
   }
 
   componentDidMount () {
@@ -87,14 +91,23 @@ class MyHeader extends React.Component {
   }
 
   logout () {
-    
+    const {history,submitLogout} = this.props
+    let params = {
+      url: this.logoutUrl,
+    }
+    submitLogout(params).then(res=>{
+      history.push('/login')
+    }).catch(err=>{
+      console.log(err)
+    })
+
   }
 
   handleMenuClick (e) {
     if(e.key==1){
       this.triggerModal(true)
     }else if(e.key==2){
-
+      this.logout()
     }
   }
 
@@ -157,5 +170,10 @@ class MyHeader extends React.Component {
     );
   }
 }
-
-export default MyHeader
+const mapStateToProps = state => ({
+  login: state.login
+})
+const mapDispatchToProps = {
+  submitLogout
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MyHeader)
