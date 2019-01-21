@@ -13,6 +13,40 @@ code {
     monospace;
 }
 
+/* 公共 */
+.fl{float: left;}
+.fr{float: right;}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+@keyframes rotate{
+  0%{
+      transform: rotate(0);
+    }
+  50%{
+    transform:rotate(180deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+.rotate{
+  transition: 0.5s;
+  transform-origin: 50% 50%;  
+  animation: rotate 1s linear infinite;  /*开始动画后无限循环，用来控制rotate*/
+}
+/* 公共结束 */
+
+/* 头部组件 */
+.header-right{
+  margin-right: 20px;
+}
+/* 头部结束 */
+
 /* 每个页面的样式不多，所有的样式都写在这个文件中 */
 
 /* 登录 */

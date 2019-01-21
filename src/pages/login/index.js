@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
-import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux'
 import { submitLogin } from '@/redux/actions'
 import {Card, Form, Icon, Input, Button, Checkbox, message} from 'antd'
-import http from '@/plugins/axios'
 import {deepcopy} from '@/libs/utils'
-import jsCookie from 'js-cookie'
 import md5 from 'md5'
+import {savePasswordKey} from '@/libs/config'
 
 // 引入提示语言包
 import LanguagePack from '@/libs/locale-provider/zh_CN'
@@ -28,9 +26,9 @@ class Login extends Component {
 
     this.loginUrl = 'web/sys/user/login'
     this.getAuth = 'web/sys/perm/shiro/vue'
-    this.sessionKey = 'JSESSIONID'
     this.loginErrTxt = LoginPack.error
     this.noAuthTxt = LoginPack.noAuth
+    this.getAuthError = LoginPack.getAuthError
     this.loginSuccess = LoginPack.success
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -39,8 +37,8 @@ class Login extends Component {
   
 
   componentDidMount(){
-    if(localStorage.lu){
-      let {loginName, loginPass} = JSON.parse(localStorage.lu)
+    if(localStorage[savePasswordKey]){
+      let {loginName, loginPass} = JSON.parse(localStorage[savePasswordKey])
       this.props.form.setFieldsValue({
         loginName,
         loginPass,
@@ -52,10 +50,10 @@ class Login extends Component {
     let vm = this
     let {rememberMe} = vm.state
     if(rememberMe){
-      sessionStorage.lu = JSON.stringify(data)
-      localStorage.lu = JSON.stringify(data)
+      sessionStorage[savePasswordKey] = JSON.stringify(data)
+      localStorage[savePasswordKey] = JSON.stringify(data)
     }else{
-      localStorage.removeItem('lu')
+      localStorage.removeItem(savePasswordKey)
     }
   }
 
@@ -83,10 +81,19 @@ class Login extends Component {
       url: vm.getAuth
     }
     // 
-    submitLogin(loginParams, authParams, vm.sessionKey)
-    setTimeout(function(){
+    submitLogin(loginParams, authParams).then(() =>{
+      // 登陆成功
+      message.success(vm.loginSuccess)
       history.push('/')
-    },1000)
+    }).catch(err=>{
+      if(err.isLoginError){
+        message.error(vm.loginErrTxt)
+      }else if(err.getAuthError){
+        message.error(vm.getAuthError)
+      }else if(err.noAuth){
+        message.error(vm.noAuthTxt)
+      }
+    })
   }
 
   handleSubmit(e){
@@ -97,38 +104,7 @@ class Login extends Component {
         // save password
         vm.savePassword(values)
         // vm.skipLogin()
-        vm.storeLogin(values)        
-        return
-        let ajaxData = deepcopy(values)
-        ajaxData.loginPass = window.hex_md5(ajaxData.loginPass)
-        let loginParams = {
-          method: 'post',
-          url: vm.loginUrl,
-          params: ajaxData
-        }
-        http(loginParams).then(function(res){
-          if(res.code==1){
-            let { sessionId, sysUser } = res.data
-            sessionStorage.sysUser = JSON.stringify(sysUser)
-            jsCookie.set('JSESSIONID',sessionId,{ path: '' })
-            let authParms = {
-              method: 'post',
-              url: vm.getAuth,
-            }
-            http(authParms).then(function(res2){
-              if(res2.code==1){
-                // 授权成功
-                let {history} = vm.props
-                message.success(vm.loginSuccess)
-                history.push('/common')
-              }else{
-                message.error(vm.noAuthTxt)
-              }
-            })
-          }else{
-            message.error(vm.loginErrTxt)
-          }
-        })
+        vm.storeLogin(values)
       }
     })
   }

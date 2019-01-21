@@ -13,8 +13,6 @@ class SideMenu extends Component {
 
   render () {
     const {menuData, login} = this.props
-    console.log('菜单 login: ',login)
-    console.log('menuData: ',menuData)
     return (
       <Menu mode="inline" theme="dark">
         <Menu.Item key="1">
