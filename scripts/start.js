@@ -92,10 +92,17 @@ checkBrowsers(paths.appPath, isInteractive)
     // 覆写代理
     serverConfig.proxy = {
       '/apis': {
-        target: 'http://10.0.0.12:8086',  //  后端ip
+        target: 'http://10.0.0.110:8086',  //  后端ip
         changeOrigin: true,
         pathRewrite: {
           '^/apis': '/'
+        }
+      },
+      '/test': {
+        target: 'https://cnodejs.org/api/v1',  //  测试cNode开放api接口
+        changeOrigin: true,
+        pathRewrite: {
+          '^/test': '/'
         }
       }
     }
