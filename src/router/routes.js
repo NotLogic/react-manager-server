@@ -1,37 +1,20 @@
 import React from 'react'
-import {Route, Switch} from 'react-router'
-import config, {study} from '@/router/config'
+import {Route, Switch, Redirect} from 'react-router'
+// import config, {study} from '@/router/config'
 
 
 import App from '@/app'
 import NoMatch from '@/pages/404'
+import Login from '@/pages/404'
+import Home from '@/pages/home'
 
-
+// react router的匹配规则是什么？匹配到第一个之后还会继续匹配吗？
 const routes = (
-  <Switch>
-    <Route path="/" exact component={App} />
-    {Object.keys(config).map(
-      key => {
-        let val = config[key]
-        if(val.children && val.children instanceof Object){
-          // return Object.keys(val.children).map(_key =>
-          //   <Route
-          //     key={_key}
-          //     path={val.children[_key].path}
-          //     component={val.children[_key].component}
-          //   ></Route>
-          // )
-        }else{
-          return <Route
-            key={key} 
-            path={val.path}
-            component={val.component} 
-          />
-        }
-      }
-    )}
-    <Route component={NoMatch} />
-  </Switch>
+  <>
+    <Route path="/" component={Login} />
+    <Route path="/login" component={Login} />
+    <Route path='/*' component={NoMatch} />
+  </>
 );
 
 export default routes

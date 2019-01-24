@@ -31,6 +31,17 @@ function login (previousState={}, action) {
       return previousState
   }
 }
+function menuData (previousState=[], action) {
+  switch(action.type){
+    case types.SET_MENU_DATA :
+      return [
+        ...previousState,
+        ...action.menuData
+      ]
+    default :
+      return previousState
+  }
+}
 
 // 使用自定义根reducer
 // const rootReducer = function(previousState={}, action){
@@ -42,6 +53,7 @@ function login (previousState={}, action) {
 // options  object: 键名为存放于state对象中的键名，键值为需要合并reducer函数
 const rootReducer = combineReducers({
   login,
+  menuData,
 })
 
 export default rootReducer

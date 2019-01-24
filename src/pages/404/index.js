@@ -1,9 +1,10 @@
-import React, {Component} from 'react'
+import React from 'react'
 
-export default class NoMatch extends Component {
+class NoMatch extends React.Component {
   render () {
     return (
       <div>404页面</div>
     );
   }
 }
+export default NoMatch

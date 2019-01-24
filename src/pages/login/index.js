@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 import { submitLogin } from '@/redux/actions'
 import {Card, Form, Icon, Input, Button, Checkbox, message} from 'antd'
@@ -16,7 +16,7 @@ function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-class Login extends Component {
+class Login extends React.Component {
   // 所有的数据均写在类组件的构造方法中，方便统一管理
   constructor(props){
     super(props)

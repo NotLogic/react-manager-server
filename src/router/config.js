@@ -3,7 +3,7 @@ import Redirects from '@/pages/study/redirects'
 import UrlParameters from '@/pages/study/urlParameters'
 import CustomLink from '@/pages/study/customLink'
 import PreventingTransitions from '@/pages/study/preventingTransitions'
-import NoMatch from '@/pages/study/noMatch'
+import NoMatch2 from '@/pages/study/noMatch'
 import RecursiveExample from '@/pages/study/recursiveExample'
 import Sidebar from '@/pages/study/sidebar'
 import AnimationTransitions from '@/pages/study/animationTransitions'
@@ -15,6 +15,12 @@ import QueryParams from '@/pages/study/queryParams'
 
 import Login from '@/pages/login'
 import Home from '@/pages/home'
+import NoMatch from '@/pages/404'
+
+// 侧边菜单
+import systemUser from '@/pages/authority/systemUser'
+import role from '@/pages/authority/role'
+import authority from '@/pages/authority'
 
 /* 学习 */
 export const queryParams = {
@@ -50,8 +56,8 @@ export const recursiveExample = {
   component: RecursiveExample
 }
 export const noMatch = {
-  path: '/noMatch',
-  component: NoMatch
+  path: '/noMatch2',
+  component: NoMatch2
 }
 export const preventingTransitions = {
   path: '/preventingTransitions',
@@ -73,18 +79,6 @@ export const basic = {
   path: '/basic',
   component: Basic
 }
-
-/* 学习结束 */
-
-export const login = {
-  path: '/login',
-  component: Login
-}
-export const home = {
-  path: '/home',
-  component: Home
-}
-
 export const study = {
   basic,
   urlParameters,
@@ -102,11 +96,33 @@ export const study = {
   queryParams,
 }
 
+/* 学习结束 */
+
+export const login = {
+  path: '/login',
+  component: Login
+}
+export const HOME_PATH = '/home'
+export const home = {
+  path: HOME_PATH,
+  component: Home
+}
+
+
+// 侧边菜单配置
+export const menuConfig = {
+  getComponent(name){
+    return this[name] || this['NoMatch']
+  },
+  NoMatch,
+  // 以下的键名必须和数据库存储保持一致
+  systemUser,
+  role,
+  authority_index: authority,
+}
+
 
 export default {
   login,
   home,
-  // study: {
-  //   children: study
-  // }
 }

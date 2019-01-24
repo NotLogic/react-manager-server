@@ -31,12 +31,14 @@ http.interceptors.response.use(
     if(response && response.status === 200){
       // 登录超时，提示进行重新登录
       // 请求成功，但返回的数据中状态码为-1，重新登录
-      if(response.data && response.data.code === -1){
+      if(response.data && response.data.code == -1){
         Modal.confirm({
           title: '登录超时',
           content: '请点击确定前往登录页进行重新登录',
           onOk: function(){
             // 前往登录页的逻辑
+            // 如何在组件外进行路由跳转
+            message.info('组件外跳转功能正在研发~.~')
           }
         })
       }

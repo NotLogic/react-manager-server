@@ -14,21 +14,23 @@ import * as serviceWorker from './serviceWorker';
 import 'whatwg-fetch' 
 
 // 路由
-import {BrowserRouter as Router} from 'react-router-dom'
-import routes from '@/router/routes'
+import MyRouter from '@/router'
 
 // 状态管理
 import { Provider } from 'react-redux'
 import store from './redux'
 
+// 热重载
+import { AppContainer } from 'react-hot-loader';
+
 ReactDOM.render((
-  <Provider store={store}>
-    <LocaleProvider locale={zhCN}>
-      <Router>
-        {routes}
-      </Router>
-    </LocaleProvider>
-  </Provider>
+  <AppContainer>
+    <Provider store={store}>
+      <LocaleProvider locale={zhCN}>
+        <MyRouter />
+      </LocaleProvider>
+    </Provider>
+  </AppContainer>
   ), document.getElementById('root')
 );
 
