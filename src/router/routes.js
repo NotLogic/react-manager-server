@@ -15,8 +15,8 @@ const routes = (
       <Redirect to={HOME_PATH} push></Redirect>
     )} />
     <Route path="/login" component={Login} />
-    {/* 将所有的侧边菜单路由置于/app下 */}
-    <Route path='/app' component={App} />
+    {/* 根据路由匹配规则这样写可以实现，会不会有什么问题 */}
+    <Route path='/' component={App} />
     <Route path='/404' component={NoMatch} />
     <Route path='/*' component={NoMatch} />
   </Switch>

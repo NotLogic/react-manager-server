@@ -100,7 +100,7 @@ export const login = {
   path: '/login',
   component: Login
 }
-export const HOME_PATH = '/app/home'
+export const HOME_PATH = '/home'
 export const home = {
   path: HOME_PATH,
   component: Home

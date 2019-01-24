@@ -16,9 +16,8 @@ class SideMenu extends Component {
   }
 
   handleClick(target){
-    const {key} = target
+    const {key: path} = target
     const {history} = this.props
-    const path = '/app' + key
     history.push(path)
   }
 
