@@ -15,8 +15,11 @@ class SideMenu extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  handleClick(key){
-    console.log('key: ',key)
+  handleClick(target){
+    const {key} = target
+    const {history} = this.props
+    const path = '/app' + key
+    history.push(path)
   }
 
   render () {

@@ -137,8 +137,10 @@ class MyHeader extends React.Component {
     return (
       <div className="clear-fix">
         <div className="header-left fl">
+          <Link to="/app/home">首页</Link>
           头部
           <Link to="/login">注销</Link>
+          
         </div>
         <div className="header-right fr">
           <Dropdown overlay={ DropdownMenu(this.handleMenuClick) } placement='bottomCenter'>

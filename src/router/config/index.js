@@ -15,12 +15,10 @@ import QueryParams from '@/pages/study/queryParams'
 
 import Login from '@/pages/login'
 import Home from '@/pages/home'
-import NoMatch from '@/pages/404'
 
-// 侧边菜单
-import systemUser from '@/pages/authority/systemUser'
-import role from '@/pages/authority/role'
-import authority from '@/pages/authority'
+
+import menuConfig from './menuConfig'
+
 
 /* 学习 */
 export const queryParams = {
@@ -102,27 +100,15 @@ export const login = {
   path: '/login',
   component: Login
 }
-export const HOME_PATH = '/home'
+export const HOME_PATH = '/app/home'
 export const home = {
   path: HOME_PATH,
   component: Home
 }
 
 
-// 侧边菜单配置
-export const menuConfig = {
-  getComponent(name){
-    return this[name] || this['NoMatch']
-  },
-  NoMatch,
-  // 以下的键名必须和数据库存储保持一致
-  systemUser,
-  role,
-  authority_index: authority,
-}
-
-
 export default {
   login,
   home,
+  menuConfig
 }

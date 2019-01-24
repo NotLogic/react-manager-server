@@ -4,7 +4,10 @@ import { Modal, message } from 'antd';
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-let baseURL = process.env.NODE_ENV === 'production' ? 'fwmp/api' : 'apis/fwmp/api'
+// 接口的url是取window.location.origin拼上公共部分再接不同部分
+// 如果是手动拼接路径，则在history模式下，请求路径会将会是: window.location.origin + window.location.pathname + api
+let ORIGIN = window.location.origin
+let baseURL = ORIGIN + (process.env.NODE_ENV === 'production' ? '/fwmp/api' : '/apis/fwmp/api')
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   baseURL,

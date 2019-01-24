@@ -1,20 +1,25 @@
 import React from 'react'
 import {Route, Switch, Redirect} from 'react-router'
-// import config, {study} from '@/router/config'
+import { HOME_PATH } from '@/router/config'
 
 
 import App from '@/app'
 import NoMatch from '@/pages/404'
-import Login from '@/pages/404'
+import Login from '@/pages/login'
 import Home from '@/pages/home'
 
 // react router的匹配规则是什么？匹配到第一个之后还会继续匹配吗？
 const routes = (
-  <>
-    <Route path="/" component={Login} />
+  <Switch>
+    <Route path="/" exact render={() => (
+      <Redirect to={HOME_PATH} push></Redirect>
+    )} />
     <Route path="/login" component={Login} />
+    {/* 将所有的侧边菜单路由置于/app下 */}
+    <Route path='/app' component={App} />
+    <Route path='/404' component={NoMatch} />
     <Route path='/*' component={NoMatch} />
-  </>
+  </Switch>
 );
 
 export default routes

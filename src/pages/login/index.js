@@ -5,6 +5,7 @@ import {Card, Form, Icon, Input, Button, Checkbox, message} from 'antd'
 import {deepcopy} from '@/libs/utils'
 import md5 from 'md5'
 import {savePasswordKey} from '@/libs/config'
+import {HOME_PATH} from '@/router/config'
 
 // 引入提示语言包
 import LanguagePack from '@/libs/locale-provider/zh_CN'
@@ -84,7 +85,7 @@ class Login extends React.Component {
     submitLogin(loginParams, authParams).then(() =>{
       // 登陆成功
       message.success(vm.loginSuccess)
-      history.push('/')
+      history.push(HOME_PATH)
     }).catch(err=>{
       if(err.isLoginError){
         message.error(vm.loginErrTxt)
