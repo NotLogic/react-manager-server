@@ -11,27 +11,22 @@ import {requestMenuData} from '@/redux/actions'
 
 const {Header, Footer, Sider, Content} = Layout
 
-class Routes extends React.Component {
+class Routes extends React.Component {  
   render () {
     const {menuData} = this.props
-    console.log('menuData: ',menuData)
     return (
       <Switch>
         <Route path={HOME_PATH} component={Home} />
-        {menuData.map(item=>{
-          item.children.map(child=>{
+        {/* 这里要注意，箭头函数后用花括号要写return才可以，不然不报错，也匹配不到组件，这个错误很难查出来 */}
+        {menuData.map(item => item.children.map(child=>{
             return <Route 
               exact
               path={`/app/${item.permValue}/${child.permValue}`} 
-              // component={menuConfig[child.permValue]} 
-              render={props=>{
-                console.log(props)
-                return null
-              }}
+              component={menuConfig[child.permValue]}
               />
           })
-        })}
-        {/* <Route render={ () => <Redirect to='/404' />} /> */}
+        )}
+        <Route render={ () => <Redirect to='/404' />} />
       </Switch>
     );
   }
@@ -65,7 +60,7 @@ class App extends React.Component {
             </Header>
             <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
               {/* 这里需要使用嵌套路由来渲染 */}
-              <Routes menuData={menuData} {...this.props} />
+              <Routes menuData={menuData} />
             </Content>
             <Footer style={{backgroundColor: '#f5f7f9',textAlign: 'center' }}>Copyright © 深圳市拉呱科技有限公司版权所有</Footer>
           </Layout>
