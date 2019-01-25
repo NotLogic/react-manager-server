@@ -42,7 +42,8 @@ import Province from '@/pages/basiceData/province'
 import Hometown from '@/pages/count/hometown'
 import UserCount from '@/pages/count/userCount'
 
-// import PostUser from '@/pages/user/postUser'
+import Post from '@/pages/post'
+
 // import PostUser from '@/pages/user/postUser'
 
 
@@ -81,5 +82,6 @@ const config = {
   province: Province,
   hometown: Hometown,
   userCount: UserCount,
+  post_index: Post,
 }
 export default config

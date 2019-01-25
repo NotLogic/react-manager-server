@@ -1,12 +1,11 @@
 import React from 'react'
 import {Route, Switch, Redirect} from 'react-router'
-import { HOME_PATH } from '@/router/config'
+import { HOME_PATH } from './config'
 
 
 import App from '@/app'
 import NoMatch from '@/pages/404'
 import Login from '@/pages/login'
-import Home from '@/pages/home'
 
 // react router的匹配规则是什么？匹配到第一个之后还会继续匹配吗？
 const routes = (
