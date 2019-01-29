@@ -85,11 +85,23 @@ function logout () {
 // 获取侧边栏菜单
 export const requestMenuData = () => dispatch => {
   return new Promise(function(resolve, reject){
-    const api = apis.getMenu()
-    const {params, config} = api
-    http(params, config).then(res=>{
+    const {params} = apis.getMenu
+    // 设置缓存，如果缓存中有从缓存拿
+    if(sessionStorage.menuData){
+      const menuData = JSON.parse(sessionStorage.menuData)
+      const res = {
+        code: 1,
+        data: menuData
+      }
+      dispatch(setMenuData(menuData))
+      resolve(res)
+      return
+    }
+    http(params).then(res=>{
       if(res.code==1){
-        dispatch(setMenuData(initMenuData(res.data)))
+        const menuData = initMenuData(res.data)
+        sessionStorage.menuData = JSON.stringify(menuData)
+        dispatch(setMenuData(menuData))
         resolve(res)
       }
     }).catch(err=>reject(err))
@@ -138,6 +150,42 @@ function setMenuData(data=[]) {
   }
   return action
 }
+
+// 页面列表
+export const changePager = (pager) => dispatch => {
+  const {current, size} = pager
+  if(current){
+
+  }
+  if(size){
+
+  }
+}
+export const paging = (params) => dispatch => {
+  dispatch({
+    type: types.SET_PAGE_DATA,
+    pageLoading: true
+  })
+  return new Promise(function(resolve, reject){
+    http(params).then(res=>{
+      dispatch({
+        type: types.SET_PAGE_DATA,
+        data: res.data,
+        pageLoading: true,
+        current: res.current,
+        total: res.total
+      })
+      resolve(res)
+    }).catch(err=>{
+      dispatch({
+        type: types.SET_PAGE_DATA,
+        pageLoading: true
+      })
+      reject(err)
+    })
+  })
+}
+
 export default {
 
 }

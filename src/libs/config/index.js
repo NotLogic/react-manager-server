@@ -13,5 +13,7 @@ const config = {
 export const sessionKey = 'JSESSIONID'
 export const savePasswordKey = 'SPK'
 export const sysUserKey = 'SUK'
+export const defaultCurrentKey = 'current'
+export const defaultPageSizeKey = 'size'
 
 export default config

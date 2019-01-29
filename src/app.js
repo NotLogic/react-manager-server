@@ -35,7 +35,7 @@ class App extends React.Component {
             <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>
               <MyHeader history={history}></MyHeader>
             </Header>
-            <Content style={{margin: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
+            <Content style={{margin: '10px',padding: '10px', border: '1px solid #999', backgroundColor: '#fff'}}>
               {/* 这里需要使用嵌套路由来渲染 */}
               <Switch>
                 <Route path={HOME_PATH} component={Home} />

@@ -42,6 +42,23 @@ function menuData (previousState=[], action) {
       return previousState
   }
 }
+function paging(previousState={}, action){
+  const { current, size, data, total, pageSizeOptions, pageLoading } = action
+  switch(action.type){
+    case types.SET_PAGE_DATA :
+      return {
+        ...previousState,
+        current,
+        size,
+        total,
+        pageSizeOptions,
+        pageLoading,
+        data,
+      }
+    default :
+      return previousState
+  }
+}
 
 // 使用自定义根reducer
 // const rootReducer = function(previousState={}, action){
@@ -54,6 +71,7 @@ function menuData (previousState=[], action) {
 const rootReducer = combineReducers({
   login,
   menuData,
+  paging,
 })
 
 export default rootReducer

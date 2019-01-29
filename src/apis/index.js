@@ -1,41 +1,110 @@
-// import http from '@/plugins/axios'
-// const url = {
-//   getTopics: 'get /topics',
-// }
-// // 
-// const BASE_URL = process.env.NODE_ENV === 'production' ? 'test' : ''
-// let config = {
-//   baseURL: BASE_URL
-// }
-// export function getTopics({page=1, tab='ask', limit=10, mdrender=false }){
-//   return new Promise(function(resolve, reject){
-//     // tab分类（string）:  ask share job good
-//     const params = {
-//       url: url.getTopics,
-//       params: {
-//         page,
-//         tab,
-//         limit,
-//         mdrender,
-//       }
-//     }
-//     http(params, config).then(res=>{
-//       console.log('res: ',res)
-//     }).catch(err=>{
-//       console.log('err: ',err)
-//     })
-//   })
-// }
+// 获取侧边菜单
+const getMenu = {
+  params: {
+    url: 'web/sys/perm/dataAllGrid'
+  }
+}
+// 系统用户
+const systemUser = {
+  dataGrid: {
+    params: {
+      url: 'web/sys/user/dataGrid',
+      method: 'post'
+    },
+  },
+  add: {
+    params: {
+      url: 'web/sys/user/add'
+    },
+  },
+  edit: {
+    params: {
+      url: 'web/sys/user/update'
+    },
+  },
+  delete: {
+    params: {
+      url: 'web/sys/user/delete'
+    },
+  },
+  search:{
+    params: {
+      url: 'web/sys/user/search'
+    },
+  }
+}
+// 角色
+const role = {
+  dataGrid: {
+    params: {
+      url: 'web/sys/role/dataGrid',
+      method: 'post'
+    },
+  },
+  all: {
+    params: {
+      url: 'web/sys/role/dataAllGrid'
+    },
+  },
+  add: {
+    params: {
+      url: 'web/sys/role/add'
+    },
+  },
+  edit: {
+    params: {
+      url: 'web/sys/user/update'
+    },
+  },
+  delete: {
+    params: {
+      url: 'web/sys/role/delete'
+    },
+  },
+  search:{
+    params: {
+      url: ''
+    },
+  }
+}
+// 权限列表
+const authority = {
+  dataGrid: {
+    params: {
+      url: 'web/sys/perm/dataGrid'
+    },
+  },
+  all: {
+    params: {
+      url: 'web/sys/perm/dataAllGrid'
+    },
+  },
+  add: {
+    params: {
+      url: 'web/sys/perm/add'
+    },
+  },
+  edit: {
+    params: {
+      url: 'web/sys/perm/update'
+    },
+  },
+  delete: {
+    params: {
+      url: 'web/sys/perm/delete'
+    },
+  },
+  search:{
+    params: {
+      url: 'web/sys/perm/search'
+    },
+  }
+}
 
 const apis = {
-  // 请求侧边菜单数据
-  getMenu(){
-    return {
-      params: {
-        url: 'web/sys/perm/dataAllGrid'
-      },
-      config: {}
-    }
-  }
+  getMenu,
+  systemUser,
+  role,
+  authority,
 }
 export default apis
