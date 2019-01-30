@@ -12,9 +12,6 @@ import {requestMenuData} from '@/redux/actions'
 const {Header, Footer, Sider, Content} = Layout
 
 class App extends React.Component {
-  constructor (props) {
-    super(props)
-  }
   componentWillMount(){
     const {requestMenuData, menuData} = this.props
     // 请求侧边菜单数据

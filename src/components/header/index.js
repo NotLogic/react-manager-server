@@ -1,14 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {submitLogout} from '@/redux/actions'
-import { Row, Col, Menu, Dropdown, Icon, Modal, Form, Select } from 'antd'
-import { Link } from 'react-router-dom'
+import { Row, Col, Menu, Dropdown, Icon, Modal, Form, Select, Button } from 'antd'
 import {sysUserKey} from '@/libs/config'
 
 const DropdownMenu = handleMenuClick => (
   <Menu onClick={handleMenuClick} >
     <Menu.Item key="1">修改昵称/密码</Menu.Item>
-    <Menu.Item key="2">注销</Menu.Item>
+    {/* <Menu.Item key="2">注销</Menu.Item> */}
   </Menu>
 );
 
@@ -66,7 +65,6 @@ class MyHeader extends React.Component {
       modalShow: false,
       submitLoading: false
     }
-    this.logoutUrl = 'web/sys/user/quit'
     this.modifyPassword = 'web/sys/user/update'
 
     this.handleMenuClick = this.handleMenuClick.bind(this)
@@ -91,22 +89,25 @@ class MyHeader extends React.Component {
   }
 
   logout () {
-    const {history,submitLogout} = this.props
-    let params = {
-      url: this.logoutUrl,
-    }
-    submitLogout(params).then(res=>{
-      history.push('/login')
-    }).catch(err=>{
-      console.log(err)
-    })
-
+    const vm = this
+    Modal.confirm({
+      title: '确认退出',
+      content: '请点击确定前往登录页进行重新登录',
+      onOk: function(){
+        const {history,submitLogout} = vm.props
+        submitLogout().then(res=>{
+          history.push('/login')
+        }).catch(err=>{
+          console.log(err)
+        })
+      }
+    })    
   }
 
-  handleMenuClick (e) {
-    if(e.key==1){
+  handleMenuClick (target) {
+    if(target.key==1){
       this.triggerModal(true)
-    }else if(e.key==2){
+    }else if(target.key==2){
       this.logout()
     }
   }
@@ -137,9 +138,7 @@ class MyHeader extends React.Component {
     return (
       <div className="clear-fix">
         <div className="header-left fl">
-          头部
-          <Link to="/login">注销</Link>
-          
+          面包屑导航
         </div>
         <div className="header-right fr">
           <Dropdown overlay={ DropdownMenu(this.handleMenuClick) } placement='bottomCenter'>
@@ -151,6 +150,7 @@ class MyHeader extends React.Component {
               </a>
             </span>
           </Dropdown>
+          <Button onClick={this.logout} style={{marginLeft: '20px'}}>注销</Button>
         </div>
         <Modal
           title='修改昵称/密码'

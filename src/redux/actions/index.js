@@ -62,8 +62,9 @@ function isLogined ({ isLogining, sessionId, sysUser, menuList, permissionList }
 }
 
 // 退出登录
-export const submitLogout = params => dispatch => {
+export const submitLogout = () => dispatch => {
   return new Promise(function(resolve, reject){
+    const {params} = apis.logout
     http(params).then(res=>{
       if(res.code==1){
         dispatch(logout)
@@ -99,7 +100,7 @@ export const requestMenuData = () => dispatch => {
     }
     http(params).then(res=>{
       if(res.code==1){
-        const menuData = initMenuData(res.data)
+        const menuData = resultMenuData(res.data)
         sessionStorage.menuData = JSON.stringify(menuData)
         dispatch(setMenuData(menuData))
         resolve(res)
@@ -107,7 +108,7 @@ export const requestMenuData = () => dispatch => {
     }).catch(err=>reject(err))
   })
 }
-function initMenuData (data) {
+function resultMenuData (data) {
   let parentMenuData=[],childrenMenuData=[]
   data.forEach(item=>{
     // permTypeMap: { 
@@ -143,7 +144,7 @@ function initMenuData (data) {
   })
   return parentMenuData
 }
-function setMenuData(data=[]) {  
+function setMenuData(data=[]) {
   let action = {
     type: types.SET_MENU_DATA,
     menuData: data

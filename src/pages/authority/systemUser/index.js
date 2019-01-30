@@ -160,6 +160,8 @@ class SystemUser extends React.Component {
       pageSizeKey: '',
       total: 0,
       pageLoading: false,
+      dialogShow: false,
+      currentDialog: 'add',
       pageData: [
         {
           id: '1',
@@ -224,8 +226,7 @@ class SystemUser extends React.Component {
       ],
       // 表格默认选中的的
       selectedRowKeys: [],
-      dialogShow: false,
-      currentDialog: 'add'
+      
 
     }
 

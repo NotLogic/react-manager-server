@@ -1,11 +1,10 @@
-import React, {Component} from 'react'
-import {Menu, Icon} from 'antd'
-import {connect} from 'react-redux'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Menu } from 'antd'
+import { connect } from 'react-redux'
 
 const SubMenu = Menu.SubMenu
 
-class SideMenu extends Component {
+class SideMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

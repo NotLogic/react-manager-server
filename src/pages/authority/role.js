@@ -1,96 +1,124 @@
 import React from 'react'
-import { Table, Tag, Divider } from 'antd'
+import { Button, Table ,Form, Input, Modal} from 'antd'
+import Paging from '@/components/paging'
+import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
 class Role extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
-      pageData: [{
-        key: '1',
-        firstName: 'John',
-        lastName: 'Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      }, {
-        key: '2',
-        firstName: 'Jim',
-        lastName: 'Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      }, {
-        key: '3',
-        firstName: 'Joe',
-        lastName: 'Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      }],
+      [defaultCurrentKey]: 1,
+      [defaultPageSizeKey]: 10,
+      total: 0,
+      pageLoading: false,
+      dialogShow: false,
+      currentDialog: 'add',
+      pageData: [],
+      columns: [
+        {
+          title: 'ID',
+          dataIndex: 'id'
+        },
+        {
+          title: '角色编码',
+          dataIndex: 'roleValue'
+        },
+        {
+          title: '角色名称',
+          dataIndex: 'roleName'
+        },
+        {
+          title: '角色描述',
+          dataIndex: 'roleDesc'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '修改时间',
+          dataIndex: 'modifyTime'
+        },
+        {
+          title: '操作',
+          render: (text, record, index) => {
+            const vm = this
+            return (<div>
+              <Button onClick={() => {
+                vm.editRow(record)
+              }} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
+              <Button onClick={() => {
+                vm.delRow({id: record.id})
+              }} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
+            </div>);
+          }
+        },
+      ],
 
+      // 
+      size: 'small'
     }
+
+    this.paging = this.paging.bind(this)
+    this.addRow = this.addRow.bind(this)
+    this.editRow = this.editRow.bind(this)
   }
 
+  addRow () {
+    this.setState({
+      currentDialog: 'add',
+      dialogShow: true
+    })
+  }
 
+  delRow({id, title='确认删除', content='确认删除这条数据吗？'}){
+    Modal.confirm({
+      title,
+      content,
+      onOk: function(){
+        console.log('id: ',id)
+        
+      }
+    })
+  }
+
+  editRow(data){
+    console.log('data: ',data)
+  }
+
+  paging(pager){
+    const vm = this    
+    
+  }
 
   render () {
-    const { Column, ColumnGroup } = Table
-    let { pageData } = this.state
+    let {
+      current,
+      size,
+      total,
+      pageLoading,
+      pageData,
+      columns,
+    } = this.state
     return (
       <div>
+        <div style={{marginBottom: '16px'}}>
+          <Button size={ size } onClick={this.addRow} disabled={pageLoading} type="primary">添加</Button>
+        </div>
         <Table
           bordered
+          loading={pageLoading}
+          pagination={false}
+          columns={columns}
           dataSource={pageData}
-        >
-          {/* 列头 */}
-          <ColumnGroup
-            title='Name'
-          >
-            <Column
-              title='First Name'
-              dataIndex='firstName'
-              key='firstName'
-            />
-            <Column
-              title='Last Name'
-              dataIndex='lastName'
-              key='lastName'
-            />
-          </ColumnGroup>
-          <Column
-            title='Age'
-            dataIndex='age'
-            key='age'
-          />
-          <Column
-            title='Address'
-            dataIndex='address'
-            key='address'
-          />
-          <Column
-            title='Tags'
-            dataIndex='tags'
-            key='tags'
-            render={tags => (
-              <span>{tags.map(tag=><Tag key={tag}>{tag}</Tag>)}</span>
-            )}
-          />
-          <Column
-            title='Action'
-            key='action'
-            render={(text, record) => {
-              // 这个函数会循环调用，就打印值来看text和record完全相同
-
-              return (
-                <span>
-                  <a>{record.age}</a>
-                  <Divider type='vertical' />
-                  <a>{record.lastName}</a>
-                </span>
-              )
-            }}
-          />
-        </Table>
+        />
+        <Paging
+          current={current}
+          size={size}
+          total={total}
+          pageLoading={pageLoading}
+          paging={this.paging}
+        />
       </div>
     );
   }
