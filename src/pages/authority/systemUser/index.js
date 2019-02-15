@@ -80,7 +80,7 @@ const WrappedSearchForm = Form.create({
 })(SearchFrom)
 
 // 新增/编辑表单
-class AddEditForm extends React.Component {
+class SubmitForm extends React.Component {
   constructor(props){
     super(props)
 
@@ -88,15 +88,21 @@ class AddEditForm extends React.Component {
 
   render () {
     const {
-      currentDialog
+      currentDialog,
+      form
     } = this.props
+    const {
+      getFieldDecorator
+    } = form
     return (<Form
-      layout='inline'
+      layout='horizontal'
     >
       <Form.Item
         label='账号'
       >
-        <Input />
+        {getFieldDecorator('roleValue', {
+          rules: [{ required: true, message: "账号不能为空" }]
+        })(<Input placeholder='请输入账号' />)}
       </Form.Item>
       <Form.Item
         label='密码'
@@ -111,9 +117,9 @@ class AddEditForm extends React.Component {
     </Form>);
   }
 }
-const WrappedAddEditForm = Form.create({
+const WrappedSubmitForm = Form.create({
   name: SUBMIT_FORM_NAME
-})(AddEditForm)
+})(SubmitForm)
 
 // 新增/编辑 弹窗
 class SubmitModal extends React.Component {
@@ -141,7 +147,7 @@ class SubmitModal extends React.Component {
         <Button onClick={submitFormDialog} key='submit' type='primary'>确定</Button>
       ]}
     >
-      <WrappedAddEditForm />
+      <WrappedSubmitForm />
     </Modal>);
   }
 }

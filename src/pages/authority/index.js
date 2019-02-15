@@ -64,7 +64,6 @@ class AuthorityList extends React.Component {
       ],
 
       // 
-      size: 'small'
     }
 
     this.paging = this.paging.bind(this)
