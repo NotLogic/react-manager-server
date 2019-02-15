@@ -1,15 +1,11 @@
 import React from 'react'
 import { Menu } from 'antd'
-import { connect } from 'react-redux'
 
 const SubMenu = Menu.SubMenu
 
 class SideMenu extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-
-    }
 
     this.handleClick = this.handleClick.bind(this)
   }
@@ -48,9 +44,4 @@ class SideMenu extends React.Component {
     );
   }
 }
-const mapStateToProps = state => ({
-  menuData: state.menuData,
-})
-
-
-export default connect(mapStateToProps)(SideMenu)
+export default SideMenu

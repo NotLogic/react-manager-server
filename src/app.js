@@ -26,7 +26,7 @@ class App extends React.Component {
       <div style={{position: 'fixed',left: 0,right: 0,top: 0,bottom: 0}} >
         <Layout style={{ minHeight: '100vh'}}>
           <Sider style={{backgroundColor: '#001529' }}>
-            <SideMenu history={history} />
+            <SideMenu menuData={menuData} history={history} />
           </Sider>
           <Layout>
             <Header style={{backgroundColor: '#fff',padding: '0 10px'}}>

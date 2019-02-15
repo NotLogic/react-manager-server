@@ -104,8 +104,8 @@ class Login extends React.Component {
       if(!err){
         // save password
         vm.savePassword(values)
-        // vm.skipLogin()
-        vm.storeLogin(values)
+        vm.skipLogin()
+        // vm.storeLogin(values)
       }
     })
   }
