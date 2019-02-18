@@ -3,89 +3,80 @@ import { Button, Table ,Form, Input, Modal, Row, Col} from 'antd'
 import Paging from '@/components/paging'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
-class SubmitForm extends React.Component {
-  constructor(props){
-    super(props)
-
-  }  
-  render(){
-    const {
-      getFieldDecorator
-    } = this.props.form
-    const formItemLayout = {
-      labelCol: { span: 10 },
-      wrapperCol: { span: 14 },
-    };
-    return (<Form>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            {...formItemLayout}
-            label='角色编码'
-          >
-            {getFieldDecorator('roleValue', {
-              rules: [{ required: true, message: "角色值不能为空" }]
-            })(<Input placeholder='请输入角色值' />)}
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            {...formItemLayout}
-            label='角色名称'
-          >
-            {getFieldDecorator('roleName', {
-              rules: [{ required: true, message: "角色名称不能为空" }]
-            })(<Input placeholder='请输入角色名称' />)}
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            {...formItemLayout}
-            label='角色描述'
-          >
-            {getFieldDecorator('roleDesc', {})(<Input placeholder='请输入角色描述' />)}
-          </Form.Item>
-        </Col>
-      </Row>
-    </Form>);
+const FormDialog = Form.create()(
+  class MyFormDialog extends React.Component {
+    handleSelectChange = (value) => {
+      if(value == '2'){
+       this.props.form.setFieldsValue({
+        isLeaf: '1'
+       }) 
+      }
+    }
+    render(){
+      const {
+        currentDialog,
+        dialogSubmitLoading,
+        closeModal,
+        resetDialogForm,
+        submitDialogForm,
+        dialogShow,
+        form
+      } = this.props
+      const {
+        getFieldDecorator
+      } = form
+      const formItemLayout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+      };
+      return (<Modal
+        maskClosable={false}
+        title={currentDialog}
+        visible={dialogShow}
+        onCancel={closeModal}
+        footer={[
+          <Button key="back" onClick={resetDialogForm}>重置</Button>,
+          <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
+        ]}
+      >
+        <Form>
+          {/* 隐藏的id输入框 */}
+          {getFieldDecorator('id', {})(<Input style={{display: 'none'}} />)}
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                {...formItemLayout}
+                label='角色编码'
+              >
+                {getFieldDecorator('roleValue', {
+                  rules: [{ required: true, message: "角色值不能为空" }]
+                })(<Input placeholder='请输入角色值' />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                {...formItemLayout}
+                label='角色名称'
+              >
+                {getFieldDecorator('roleName', {
+                  rules: [{ required: true, message: "角色名称不能为空" }]
+                })(<Input placeholder='请输入角色名称' />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                {...formItemLayout}
+                label='角色描述'
+              >
+                {getFieldDecorator('roleDesc', {})(<Input placeholder='请输入角色描述' />)}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>);
+    }
   }
-}
-const WrapperSubmitForm = Form.create({
- 
-})(SubmitForm)
-
-class FormDialog extends React.Component {
-  constructor(props){
-    super(props)
-    this.form = null
-  }
-
-  render(){
-    const {
-      currentDialog,
-      dialogSubmitLoading,
-      closeModal,
-      resetDialogForm,
-      submitDialogForm,
-      dialogShow,
-      initForm
-    } = this.props
-    return (<Modal
-      title={currentDialog}
-      visible={dialogShow}
-      onOk={this.handleOk}
-      onCancel={closeModal}
-      footer={[
-        <Button key="back" onClick={resetDialogForm}>重置</Button>,
-        <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
-      ]}
-    >
-      <WrapperSubmitForm 
-        wrappedComponentRef={form=>initForm(form)}
-      />
-    </Modal>);
-  }
-}
+)
 
 class Role extends React.Component {
   constructor(props) {
@@ -151,20 +142,18 @@ class Role extends React.Component {
     }
   }
 
-  initForm = (form) => {
-    this.form = form && form.props.form
+  paging = (pager) => {
+    const vm = this
+    
+  }
+
+  saveFormRef = (formRef) => {
+    this.formRef = formRef
   }
 
   addRow = () => {
     this.setState({
       currentDialog: 'add',
-      dialogShow: true
-    })
-  }
-
-  editRow = (data) => {
-    this.setState({
-      currentDialog: 'edit',
       dialogShow: true
     })
   }
@@ -180,28 +169,32 @@ class Role extends React.Component {
     })
   }
 
-  paging = (pager) => {
-    const vm = this    
-    
+  editRow = (data) => {
+    this.setState({
+      currentDialog: 'edit',
+      dialogShow: true
+    })
+    this.formRef.props.form.setFieldsValue(data)
   }
 
   closeModal = () => {
-    this.resetDialogForm()
     this.setState({
       dialogShow: false
     })
+    this.resetDialogForm()
   }
 
   resetDialogForm = () => {
-    this.form.resetFields()
+    this.formRef.props.form.resetFields()
   }
 
   submitDialogForm = () => {
-    this.form.validateFields((err, values)=>{
+    const vm = this
+    vm.formRef.props.form.validateFields((err, values) => {
       if(!err){
         console.log('values: ',values)
       }
-    })
+    })    
   }
 
   render () {
@@ -239,7 +232,7 @@ class Role extends React.Component {
           dialogShow={dialogShow}
           currentDialog={currentDialog}
           dialogSubmitLoading={dialogSubmitLoading}
-          initForm={this.initForm}
+          wrappedComponentRef={this.saveFormRef}
           closeModal={this.closeModal}
           resetDialogForm={this.resetDialogForm}
           submitDialogForm={this.submitDialogForm}
