@@ -2,6 +2,17 @@ import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col, Select } from 'antd'
 import Paging from '@/components/paging'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
+// 对象中的number类型的key取值之后是string类型，使用map循环输出Select时需要注意
+const permTypeMap = {
+  1: '菜单',
+  2: '按钮',
+  3: '接口',
+  4: '特殊',
+}
+const isLeafMap = {
+  0: '不是',
+  1: '是'
+}
 
 const FormDialog = Form.create()(
   class MyFormDialog extends React.Component {
@@ -28,17 +39,7 @@ const FormDialog = Form.create()(
       const formItemLayout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
-      };
-      const permTypeMap = {
-        1: '菜单',
-        2: '按钮',
-        3: '接口',
-        4: '特殊',
-      }
-      const isLeafMap = {
-        0: '不是',
-        1: '是'
-      }
+      };      
       return (<Modal
         width={700}
         maskClosable={false}
@@ -135,7 +136,18 @@ class AuthorityList extends React.Component {
       dialogShow: false,
       currentDialog: 'add',
       dialogSubmitLoading: false,
-      pageData: [],
+      pageData: [
+        // {"id":238,"permValue":"ad","parentValue":null,"permName":"广告","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:15:47","modifyTime":"2018-10-26 10:15:47"},
+        // {"id":239,"permValue":"adviceBack","parentValue":null,"permName":"意见反馈","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:16:45","modifyTime":"2018-10-26 10:16:45"},
+        // {"id":26,"permValue":"adviceBack_index","parentValue":"adviceBack","permName":"反馈基础数据","parentName":"意见反馈","permType":1,"isLeaf":1,"createTime":"2018-08-15 19:49:01","modifyTime":"2018-08-15 19:49:01"},
+        // {"id":65,"permValue":"adviceBack_index:add","parentValue":"adviceBack_index","permName":"新增","parentName":"反馈基础数","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:38","modifyTime":"2018-08-23 12:29:38"},
+        // {"id":69,"permValue":"adviceBack_index:dataGrid","parentValue":"adviceBack_index","permName":"列表","parentName":"反馈基础数","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:42","modifyTime":"2018-08-23 12:29:42"},
+        // {"id":66,"permValue":"adviceBack_index:delete","parentValue":"adviceBack_index","permName":"删除","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:46","modifyTime":"2018-08-23 12:29:46"},
+        // {"id":67,"permValue":"adviceBack_index:edit","parentValue":"adviceBack_index","permName":"编辑","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:50","modifyTime":"2018-08-23 12:29:50"},
+        // {"id":68,"permValue":"adviceBack_index:search","parentValue":"adviceBack_index","permName":"搜索","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:54","modifyTime":"2018-08-23 12:29:54"},
+        // {"id":28,"permValue":"adviceContent","parentValue":"adviceBack","permName":"反馈内容","parentName":"意见反馈","permType":1,"isLeaf":1,"createTime":"2018-08-15 19:49:48","modifyTime":"2018-08-15 19:49:48"},
+        // {"id":70,"permValue":"adviceContent:add","parentValue":"adviceContent","permName":"新增","parentName":"反馈内容","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:58","modifyTime":"2018-08-23 12:29:58"}
+      ],
       columns: [
         {
           title: 'ID',
@@ -143,11 +155,13 @@ class AuthorityList extends React.Component {
         },
         {
           title: '权限类型',
-          dataIndex: 'permType'
+          dataIndex: 'permType',
+          render: key => <span>{permTypeMap[key]}</span>
         },
         {
           title: '是否子节点',
-          dataIndex: 'isLeaf'
+          dataIndex: 'isLeaf',
+          render: key => <span>{isLeafMap[key]}</span>
         },
         {
           title: '权限编码',

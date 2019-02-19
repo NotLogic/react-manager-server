@@ -8,23 +8,14 @@ import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
 
 // 搜索
-const WrappedSearchForm = Form.create({})(
-  class SearchFrom extends React.Component {
-    constructor(props){
-      super(props)
-      this.state = {
-        
-      }
-
-      this.handleSubmit = this.handleSubmit.bind(this)
-      this.handleReset = this.handleReset.bind(this)
-    }
+const SearchFrom = Form.create({})(
+  class MySearchFrom extends React.Component {
     
-    handleReset(){
+    handleReset = () => {
       this.props.form.resetFields()
     }
 
-    handleSubmit(e){
+    handleSubmit = (e) => {
       e.preventDefault()
       this.props.form.validateFields((err, values) => {
         if(!err){
@@ -42,7 +33,8 @@ const WrappedSearchForm = Form.create({})(
         form,
         selectedRowKeys,
         pageLoading,
-        addRow
+        addRow,
+        batchDelete
       } = this.props
       const {
         getFieldDecorator
@@ -64,8 +56,8 @@ const WrappedSearchForm = Form.create({})(
           <Form.Item>
             <Button size={ elementSize } style={styles} disabled={pageLoading} onClick={this.handleReset}>清空</Button>
             <Button size={ elementSize } style={styles} disabled={pageLoading} type="primary" htmlType='submit'>搜索</Button>
-            <Button size={ elementSize } onClick={addRow} style={styles} disabled={pageLoading} type="primary">添加</Button>
-            <Button size={ elementSize } style={styles} disabled={pageLoading || selectedRowKeys.length == 0} type="danger">批量删除</Button>    
+            <Button size={ elementSize } style={styles} disabled={pageLoading} type="primary" onClick={addRow}>添加</Button>
+            <Button size={ elementSize } style={styles} disabled={pageLoading || selectedRowKeys.length == 0 } onClick={() => batchDelete({ids: selectedRowKeys})} type="danger">批量删除</Button>
           </Form.Item>
         </Form>
       </div>);
@@ -166,27 +158,27 @@ class SystemUser extends React.Component {
       currentDialog: 'add',
       dialogSubmitLoading: false,
       pageData: [
-        {
-          id: '1',
-          loginName: 'logic',
-          nickName: '逻辑',
-          role: [1, 2, 3],
-          areaCode: '310303',
-        },
-        {
-          id: '2',
-          loginName: 'lala123',
-          nickName: '啦啦123',
-          role: [2],
-          areaCode: '310302',
-        },
-        {
-          id: '3',
-          loginName: 'haha123',
-          nickName: '哈哈123',
-          role: [3],
-          areaCode: '301301',
-        }
+        // {
+        //   id: '1',
+        //   loginName: 'logic',
+        //   nickName: '逻辑',
+        //   role: [1, 2, 3],
+        //   areaCode: '310303',
+        // },
+        // {
+        //   id: '2',
+        //   loginName: 'lala123',
+        //   nickName: '啦啦123',
+        //   role: [2],
+        //   areaCode: '310302',
+        // },
+        // {
+        //   id: '3',
+        //   loginName: 'haha123',
+        //   nickName: '哈哈123',
+        //   role: [3],
+        //   areaCode: '301301',
+        // }
       ],
       columns: [
         {
@@ -257,6 +249,16 @@ class SystemUser extends React.Component {
       }
     })
   }
+  batchDelete({ids, title='确认删除', content='确认删除这些数据吗？'}){
+    Modal.confirm({
+      title,
+      content,
+      onOk: function(){
+        console.log('ids: ',ids)
+        
+      }
+    })
+  }
 
   editRow = (data) => {
     this.setState({
@@ -311,10 +313,11 @@ class SystemUser extends React.Component {
     }
     return (
       <div>
-        <WrappedSearchForm
+        <SearchFrom
           selectedRowKeys={selectedRowKeys}
           pageLoading={pageLoading}
           addRow={this.addRow}
+          batchDelete={this.batchDelete}
         />
         <Table
           bordered

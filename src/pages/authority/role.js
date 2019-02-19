@@ -3,80 +3,79 @@ import { Button, Table ,Form, Input, Modal, Row, Col} from 'antd'
 import Paging from '@/components/paging'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
-const FormDialog = Form.create()(
-  class MyFormDialog extends React.Component {
-    handleSelectChange = (value) => {
-      if(value == '2'){
-       this.props.form.setFieldsValue({
-        isLeaf: '1'
-       }) 
-      }
-    }
-    render(){
-      const {
-        currentDialog,
-        dialogSubmitLoading,
-        closeModal,
-        resetDialogForm,
-        submitDialogForm,
-        dialogShow,
-        form
-      } = this.props
-      const {
-        getFieldDecorator
-      } = form
-      const formItemLayout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
-      };
-      return (<Modal
-        maskClosable={false}
-        title={currentDialog}
-        visible={dialogShow}
-        onCancel={closeModal}
-        footer={[
-          <Button key="back" onClick={resetDialogForm}>重置</Button>,
-          <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
-        ]}
-      >
-        <Form>
-          {/* 隐藏的id输入框 */}
-          {getFieldDecorator('id', {})(<Input style={{display: 'none'}} />)}
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                {...formItemLayout}
-                label='角色编码'
-              >
-                {getFieldDecorator('roleValue', {
-                  rules: [{ required: true, message: "角色值不能为空" }]
-                })(<Input placeholder='请输入角色值' />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                {...formItemLayout}
-                label='角色名称'
-              >
-                {getFieldDecorator('roleName', {
-                  rules: [{ required: true, message: "角色名称不能为空" }]
-                })(<Input placeholder='请输入角色名称' />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                {...formItemLayout}
-                label='角色描述'
-              >
-                {getFieldDecorator('roleDesc', {})(<Input placeholder='请输入角色描述' />)}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>);
+class MyFormDialog extends React.Component {
+  handleSelectChange = (value) => {
+    if(value == '2'){
+     this.props.form.setFieldsValue({
+      isLeaf: '1'
+     }) 
     }
   }
-)
+  render(){
+    const {
+      currentDialog,
+      dialogSubmitLoading,
+      closeModal,
+      resetDialogForm,
+      submitDialogForm,
+      dialogShow,
+      form
+    } = this.props
+    const {
+      getFieldDecorator
+    } = form
+    const formItemLayout = {
+      labelCol: { span: 8 },
+      wrapperCol: { span: 16 },
+    };
+    return (<Modal
+      maskClosable={false}
+      title={currentDialog}
+      visible={dialogShow}
+      onCancel={closeModal}
+      footer={[
+        <Button key="back" onClick={resetDialogForm}>重置</Button>,
+        <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
+      ]}
+    >
+      <Form>
+        {/* 隐藏的id输入框 */}
+        {getFieldDecorator('id', {})(<Input style={{display: 'none'}} />)}
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              {...formItemLayout}
+              label='角色编码'
+            >
+              {getFieldDecorator('roleValue', {
+                rules: [{ required: true, message: "角色值不能为空" }]
+              })(<Input placeholder='请输入角色值' />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              {...formItemLayout}
+              label='角色名称'
+            >
+              {getFieldDecorator('roleName', {
+                rules: [{ required: true, message: "角色名称不能为空" }]
+              })(<Input placeholder='请输入角色名称' />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              {...formItemLayout}
+              label='角色描述'
+            >
+              {getFieldDecorator('roleDesc', {})(<Input placeholder='请输入角色描述' />)}
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>);
+  }
+}
+const FormDialog = Form.create()(MyFormDialog)
 
 class Role extends React.Component {
   constructor(props) {
@@ -90,11 +89,11 @@ class Role extends React.Component {
       dialogShow: false,
       currentDialog: 'add',
       pageData: [
-        {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
-        {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
-        {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
-        {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
-        {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"}
+        // {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
+        // {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
+        // {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
+        // {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
+        // {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"}
       ],
       dialogSubmitLoading: false,
       columns: [
@@ -207,8 +206,8 @@ class Role extends React.Component {
       currentDialog,
       dialogShow,
       dialogSubmitLoading,
-      columns,
-    } = this.state
+      columns
+    } = this.state    
     return (
       <div>
         <div style={{marginBottom: '16px'}}>
