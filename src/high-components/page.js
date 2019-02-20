@@ -114,7 +114,6 @@ let Enhance = ComposedComponent => class extends React.Component {
   }
 
   render () {
-    console.log('props: ',this.props)
     return <ComposedComponent
       paging={this.paging}
       saveFormRef={this.saveFormRef}

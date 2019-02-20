@@ -114,12 +114,8 @@ class Role extends React.Component {
               delRow
             } = this.props
             return (<div>
-              <Button onClick={() => {
-                editRow(record)
-              }} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
-              <Button onClick={() => {
-                delRow({id: record.id})
-              }} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
+              <Button onClick={() => editRow(record)} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
+              <Button onClick={() => delRow({id: record.id})} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
             </div>);
           }
         },

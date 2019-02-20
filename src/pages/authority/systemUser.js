@@ -164,14 +164,13 @@ class SystemUser extends React.Component {
         {
           title: '操作',
           render: (text, record, index) => {
-            const vm = this
+            const {
+              editRow,
+              delRow
+            } = this.props
             return (<div>
-              <Button onClick={() => {
-                vm.editRow(record)
-              }} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
-              <Button onClick={() => {
-                vm.delRow({id: record.id})
-              }} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
+              <Button onClick={() => editRow(record)} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
+              <Button onClick={() => delRow({id: record.id})} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
             </div>);
           }
         },
@@ -222,7 +221,7 @@ class SystemUser extends React.Component {
         <SearchFrom
           selectedRowKeys={selectedRowKeys}
           pageLoading={pageLoading}
-          addRow={this.addRow}
+          addRow={addRow}
           batchDelete={this.batchDelete}
         />
         <Table
@@ -239,16 +238,16 @@ class SystemUser extends React.Component {
           size={size}
           total={total}
           pageLoading={pageLoading}
-          paging={this.paging}
+          paging={paging}
         />
         <FormDialog
           dialogShow={dialogShow}
           currentDialog={currentDialog}
           dialogSubmitLoading={dialogSubmitLoading}
-          wrappedComponentRef={this.saveFormRef}
-          closeModal={this.closeModal}
-          resetDialogForm={this.resetDialogForm}
-          submitDialogForm={this.submitDialogForm}
+          wrappedComponentRef={saveFormRef}
+          closeModal={closeModal}
+          resetDialogForm={resetDialogForm}
+          submitDialogForm={submitDialogForm}
         />
       </div>
     );
