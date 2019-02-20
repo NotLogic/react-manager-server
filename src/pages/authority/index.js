@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col, Select } from 'antd'
 import { connect } from 'react-redux'
 import Paging from '@/components/paging'
-import enhancePage from '@/high-component/page'
+import enhancePage from '@/high-components/page'
 
 
 // 对象中的number类型的key取值之后是string类型，使用map循环输出Select时需要注意

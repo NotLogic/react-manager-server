@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col} from 'antd'
 import Paging from '@/components/paging'
-import enhancePage from '@/high-component/page'
+import enhancePage from '@/high-components/page'
 
 class MyFormDialog extends React.Component {
   handleSelectChange = (value) => {
