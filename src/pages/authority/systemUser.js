@@ -2,6 +2,7 @@ import React from 'react'
 import Paging from '@/components/paging'
 import { Button, Table ,Form, Input, Modal, Row, Col, Select } from 'antd'
 import { connect } from 'react-redux'
+import enhancePage from '@/high-components/page'
 
 
 // 搜索
@@ -201,11 +202,19 @@ class SystemUser extends React.Component {
       total,
       pageLoading,
       pageData,
-      columns,
-      selectedRowKeys,
-      dialogShow,
       currentDialog,
-      dialogSubmitLoading
+      dialogShow,
+      dialogSubmitLoading,
+      paging,
+      saveFormRef,
+      addRow,
+      closeModal,
+      resetDialogForm,
+      submitDialogForm,
+    } = vm.props
+    const {
+      columns,
+      selectedRowKeys
     } = vm.state
     const rowSelection =  {
       columnWidth: 80,
@@ -256,4 +265,4 @@ class SystemUser extends React.Component {
 const mapStateToProps = state => ({
   
 })
-export default connect(mapStateToProps)(SystemUser)
+export default connect(mapStateToProps)(enhancePage(SystemUser))
