@@ -36,10 +36,10 @@ class App extends React.Component {
               {/* 这里需要使用嵌套路由来渲染 */}
               <Switch>
                 <Route path={HOME_PATH} component={Home} />
-                {/* 这里要注意，箭头函数后用花括号要写return才可以，不然不报错，也匹配不到组件，这个错误很难查出来 */}
+                {/* 这里要注意，箭头函数后用花括号要写return才可以，不然不报错，也匹配不到组件，这个错误很难查出来;或者箭头直接指向<Route>组件 */}
                 {menuData.map(item => item.children.map(child=>{
                   return <Route
-                    path={`/${item.permValue}/${child.permValue}`} 
+                    path={`/${item.permValue}/${child.permValue}`}
                     component={menuConfig[child.permValue]}
                     />
                   })

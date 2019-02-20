@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col, Select } from 'antd'
+import { connect } from 'react-redux'
 import Paging from '@/components/paging'
-import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
+import enhancePage from '@/high-component/page'
+
+
 // 对象中的number类型的key取值之后是string类型，使用map循环输出Select时需要注意
 const permTypeMap = {
   1: '菜单',
@@ -129,25 +132,6 @@ class AuthorityList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      [defaultCurrentKey]: 1,
-      [defaultPageSizeKey]: 10,
-      total: 0,
-      pageLoading: false,
-      dialogShow: false,
-      currentDialog: 'add',
-      dialogSubmitLoading: false,
-      pageData: [
-        // {"id":238,"permValue":"ad","parentValue":null,"permName":"广告","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:15:47","modifyTime":"2018-10-26 10:15:47"},
-        // {"id":239,"permValue":"adviceBack","parentValue":null,"permName":"意见反馈","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:16:45","modifyTime":"2018-10-26 10:16:45"},
-        // {"id":26,"permValue":"adviceBack_index","parentValue":"adviceBack","permName":"反馈基础数据","parentName":"意见反馈","permType":1,"isLeaf":1,"createTime":"2018-08-15 19:49:01","modifyTime":"2018-08-15 19:49:01"},
-        // {"id":65,"permValue":"adviceBack_index:add","parentValue":"adviceBack_index","permName":"新增","parentName":"反馈基础数","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:38","modifyTime":"2018-08-23 12:29:38"},
-        // {"id":69,"permValue":"adviceBack_index:dataGrid","parentValue":"adviceBack_index","permName":"列表","parentName":"反馈基础数","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:42","modifyTime":"2018-08-23 12:29:42"},
-        // {"id":66,"permValue":"adviceBack_index:delete","parentValue":"adviceBack_index","permName":"删除","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:46","modifyTime":"2018-08-23 12:29:46"},
-        // {"id":67,"permValue":"adviceBack_index:edit","parentValue":"adviceBack_index","permName":"编辑","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:50","modifyTime":"2018-08-23 12:29:50"},
-        // {"id":68,"permValue":"adviceBack_index:search","parentValue":"adviceBack_index","permName":"搜索","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:54","modifyTime":"2018-08-23 12:29:54"},
-        // {"id":28,"permValue":"adviceContent","parentValue":"adviceBack","permName":"反馈内容","parentName":"意见反馈","permType":1,"isLeaf":1,"createTime":"2018-08-15 19:49:48","modifyTime":"2018-08-15 19:49:48"},
-        // {"id":70,"permValue":"adviceContent:add","parentValue":"adviceContent","permName":"新增","parentName":"反馈内容","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:58","modifyTime":"2018-08-23 12:29:58"}
-      ],
       columns: [
         {
           title: 'ID',
@@ -186,14 +170,13 @@ class AuthorityList extends React.Component {
         {
           title: '操作',
           render: (text, record, index) => {
-            const vm = this
+            const {
+              editRow,
+              delRow
+            } = this.props
             return (<div>
-              <Button onClick={() => {
-                vm.editRow(record)
-              }} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
-              <Button onClick={() => {
-                vm.delRow({id: record.id})
-              }} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
+              <Button onClick={() => editRow(record)} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
+              <Button onClick={() => delRow({id: record.id})} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
             </div>);
           }
         },
@@ -203,61 +186,6 @@ class AuthorityList extends React.Component {
     }
   }
 
-  paging = (pager) => {
-    const vm = this
-    
-  }
-
-  saveFormRef = (formRef) => {
-    this.formRef = formRef
-  }
-
-  addRow = () => {
-    this.setState({
-      currentDialog: 'add',
-      dialogShow: true
-    })
-  }
-
-  delRow = ({id, title='确认删除', content='确认删除这条数据吗？'}) => {
-    Modal.confirm({
-      title,
-      content,
-      onOk: function(){
-        console.log('id: ',id)
-        
-      }
-    })
-  }
-
-  editRow = (data) => {    
-    this.setState({
-      currentDialog: 'edit',
-      dialogShow: true
-    })
-    this.formRef.props.form.setFieldsValue(data)
-  }
-
-  closeModal = () => {
-    this.setState({
-      dialogShow: false
-    })
-    this.resetDialogForm()
-  }
-
-  resetDialogForm = () => {
-    this.formRef.props.form.resetFields()
-  }
-
-  submitDialogForm = () => {
-    const vm = this
-    vm.formRef.props.form.validateFields((err, values) => {
-      if(!err){
-        console.log('values: ',values)
-      }
-    })    
-  }
-
   render () {
     let {
       current,
@@ -265,15 +193,23 @@ class AuthorityList extends React.Component {
       total,
       pageLoading,
       pageData,
-      columns,
       currentDialog,
       dialogShow,
       dialogSubmitLoading,
+      paging,
+      saveFormRef,
+      addRow,
+      closeModal,
+      resetDialogForm,
+      submitDialogForm,
+    } = this.props
+    const {
+      columns
     } = this.state
     return (
       <div>
         <div style={{marginBottom: '16px'}}>
-          <Button size='small' onClick={this.addRow} disabled={pageLoading} type="primary">添加</Button>
+          <Button size='small' onClick={addRow} disabled={pageLoading} type="primary">添加</Button>
         </div>
         <Table
           bordered
@@ -287,19 +223,22 @@ class AuthorityList extends React.Component {
           size={size}
           total={total}
           pageLoading={pageLoading}
-          paging={this.paging}
+          paging={paging}
         />
         <FormDialog
           dialogShow={dialogShow}
           currentDialog={currentDialog}
           dialogSubmitLoading={dialogSubmitLoading}
-          wrappedComponentRef={this.saveFormRef}
-          closeModal={this.closeModal}
-          resetDialogForm={this.resetDialogForm}
-          submitDialogForm={this.submitDialogForm}
+          wrappedComponentRef={saveFormRef}
+          closeModal={closeModal}
+          resetDialogForm={resetDialogForm}
+          submitDialogForm={submitDialogForm}
         />
       </div>
     );
   }
 }
-export default AuthorityList
+const mapStateToProps = state => ({
+  
+})
+export default connect(mapStateToProps)(enhancePage(AuthorityList))

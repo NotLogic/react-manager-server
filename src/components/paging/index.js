@@ -46,7 +46,7 @@ class Paging extends React.Component {
       pageLoading=false,
       align='right'
     } = this.props
-    let contentAlign = align=='left' ? 'flex-start' : ( align=='right' ? 'flex-end' : 'center')
+    let contentAlign = align=='left' ? 'flex-start' : ( align=='right' ? 'flex-end' : 'center' )
     let wrapperStyles = {
       padding: '10px',
       display: 'flex',
@@ -55,7 +55,7 @@ class Paging extends React.Component {
     return (
       <div className="clearfix" style={ wrapperStyles }>
         <Button
-          onClick={this.paging()}
+          onClick={ () => this.paging()}
           style={{marginRight: '10px'}}
           className={pageLoading ? 'rotate' : ''}
           shape='circle'
@@ -63,13 +63,13 @@ class Paging extends React.Component {
         />
         <Pagination
           showQuickJumper
-          onChange={this.currentChange}
           showSizeChanger
-          onShowSizeChange={this.pageSizeChange}
           pageSizeOptions={pageSizeOptions}
           current={current}
           pageSize={size}
           total={total}
+          onChange={this.currentChange}
+          onShowSizeChange={this.pageSizeChange}
         />
       </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col} from 'antd'
 import Paging from '@/components/paging'
-import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
+import enhancePage from '@/high-component/page'
 
 class MyFormDialog extends React.Component {
   handleSelectChange = (value) => {
@@ -80,22 +80,7 @@ const FormDialog = Form.create()(MyFormDialog)
 class Role extends React.Component {
   constructor(props) {
     super(props)
-    this.form = null
     this.state = {
-      [defaultCurrentKey]: 1,
-      [defaultPageSizeKey]: 10,
-      total: 0,
-      pageLoading: false,
-      dialogShow: false,
-      currentDialog: 'add',
-      pageData: [
-        // {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
-        // {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
-        // {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
-        // {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
-        // {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"}
-      ],
-      dialogSubmitLoading: false,
       columns: [
         {
           title: 'ID',
@@ -124,13 +109,16 @@ class Role extends React.Component {
         {
           title: '操作',
           render: (text, record, index) => {
-            const vm = this
+            const {
+              editRow,
+              delRow
+            } = this.props
             return (<div>
               <Button onClick={() => {
-                vm.editRow(record)
+                editRow(record)
               }} size='small' type='primary' style={{marginRight: '16px'}}>编辑</Button>
               <Button onClick={() => {
-                vm.delRow({id: record.id})
+                delRow({id: record.id})
               }} size='small' type='danger' style={{marginRight: '16px'}}>删除</Button>
             </div>);
           }
@@ -139,61 +127,6 @@ class Role extends React.Component {
 
       // 
     }
-  }
-
-  paging = (pager) => {
-    const vm = this
-    
-  }
-
-  saveFormRef = (formRef) => {
-    this.formRef = formRef
-  }
-
-  addRow = () => {
-    this.setState({
-      currentDialog: 'add',
-      dialogShow: true
-    })
-  }
-
-  delRow = ({id, title='确认删除', content='确认删除这条数据吗？'}) => {
-    Modal.confirm({
-      title,
-      content,
-      onOk: function(){
-        console.log('id: ',id)
-        
-      }
-    })
-  }
-
-  editRow = (data) => {
-    this.setState({
-      currentDialog: 'edit',
-      dialogShow: true
-    })
-    this.formRef.props.form.setFieldsValue(data)
-  }
-
-  closeModal = () => {
-    this.setState({
-      dialogShow: false
-    })
-    this.resetDialogForm()
-  }
-
-  resetDialogForm = () => {
-    this.formRef.props.form.resetFields()
-  }
-
-  submitDialogForm = () => {
-    const vm = this
-    vm.formRef.props.form.validateFields((err, values) => {
-      if(!err){
-        console.log('values: ',values)
-      }
-    })    
   }
 
   render () {
@@ -206,12 +139,20 @@ class Role extends React.Component {
       currentDialog,
       dialogShow,
       dialogSubmitLoading,
+      paging,
+      saveFormRef,
+      addRow,
+      closeModal,
+      resetDialogForm,
+      submitDialogForm,
+    } = this.props
+    const {
       columns
-    } = this.state    
+    } = this.state
     return (
       <div>
         <div style={{marginBottom: '16px'}}>
-          <Button size='small' onClick={this.addRow} disabled={pageLoading} type="primary">添加</Button>
+          <Button size='small' onClick={addRow} disabled={pageLoading} type="primary">添加</Button>
         </div>
         <Table
           bordered
@@ -225,19 +166,19 @@ class Role extends React.Component {
           size={size}
           total={total}
           pageLoading={pageLoading}
-          paging={this.paging}
+          paging={paging}
         />
         <FormDialog
           dialogShow={dialogShow}
           currentDialog={currentDialog}
           dialogSubmitLoading={dialogSubmitLoading}
-          wrappedComponentRef={this.saveFormRef}
-          closeModal={this.closeModal}
-          resetDialogForm={this.resetDialogForm}
-          submitDialogForm={this.submitDialogForm}
+          wrappedComponentRef={saveFormRef}
+          closeModal={closeModal}
+          resetDialogForm={resetDialogForm}
+          submitDialogForm={submitDialogForm}
         />
       </div>
     );
   }
 }
-export default Role
+export default enhancePage(Role)
