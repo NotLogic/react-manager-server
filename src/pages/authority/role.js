@@ -5,6 +5,16 @@ import enhancePage from '@/high-components/page'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 import apis from '@/apis/role'
 
+const pagingArguments = { ...apis.dataGrid }
+// 当需要使用自定义当前页或每页个数key时：
+// const pagingArguments = { 
+//   ...apis.dataGrid,
+//   pageConfig: {
+//     currentKey: '您自定义的key',
+//     pageSizeKey: '您自定义的key'
+//   }
+// }
+
 class MyFormDialog extends React.Component {
   handleSelectChange = (value) => {
     if(value == '2'){
@@ -129,27 +139,7 @@ class Role extends React.Component {
     }
   }
   // 
-  getPagingArguments = ( ) => {
-    let {
-      params={},
-      config={}
-    } = apis.dataGrid
-    // 处理params为符合需求的请求参数
-    // 自定义key 
-    // nowpage  pagesize
-    // currentKey pageSizeKey
-    let pageConfig = {
-      currentKey: 'nowpage',
-      pageSizeKey: 'pagesize',
-    }
-
-    // 额外的提交字段
-    return {
-      params,
-      config,
-      pageConfig
-    }
-  }
+  
 
   render () {
     let {
@@ -191,7 +181,7 @@ class Role extends React.Component {
           total={total}
           pageLoading={pageLoading}
           paging={paging}
-          pagingArguments={this.getPagingArguments()}
+          pagingArguments={pagingArguments}
         />
         <FormDialog
           dialogShow={dialogShow}
