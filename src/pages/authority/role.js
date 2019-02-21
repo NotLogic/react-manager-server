@@ -138,16 +138,17 @@ class Role extends React.Component {
     // 自定义key 
     // nowpage  pagesize
     // currentKey pageSizeKey
-    // {
-    //   currentKey: 'nowpage',
-    //   pageSizeKey: 'pagesize',
-    // }
+    let pageConfig = {
+      currentKey: 'nowpage',
+      pageSizeKey: 'pagesize',
+    }
 
     // 额外的提交字段
-    return [
+    return {
       params,
-      config
-    ]
+      config,
+      pageConfig
+    }
   }
 
   render () {
@@ -164,7 +165,9 @@ class Role extends React.Component {
       closeModal,
       resetDialogForm,
       submitDialogForm,
+      updateHack
     } = this.props
+    console.log('updateHack: ',updateHack)
     let current = this.props[defaultCurrentKey]
     let size = this.props[defaultPageSizeKey]
     const {

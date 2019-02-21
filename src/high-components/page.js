@@ -1,11 +1,12 @@
 import React from 'react'
 import { Modal } from 'antd'
-import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 import request from '@/plugins/axios'
+import { deepcopy } from '@/libs/utils'
+// 默认当前页key  默认每页个数key
+import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
 // 此高阶组件用于处理公共的页面请求处理
-// 此高阶组件会使用到redux的state，需要在connect的内层
-// todo: 如果此高阶组件中的方法不能满足需求该怎么办
+// 此高阶组件使用到redux的state时，需要在connect的内层
 let Enhance = ComposedComponent => class extends React.Component {
   constructor(props){
     super(props)
@@ -22,6 +23,7 @@ let Enhance = ComposedComponent => class extends React.Component {
       pageLoading: false,
       dialogShow: false,
       currentDialog: 'add',
+      dialogSubmitLoading: false,
       pageData: [
         // 角色列表
         // {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
@@ -50,7 +52,34 @@ let Enhance = ComposedComponent => class extends React.Component {
         // {"id":55,"loginName":"agent","loginPass":"dd7f4866b9c96aad2866f46e8e27c90f","nickName":"代理商2","salt":"cbbf4835341f45a589b716bbf1554eaf","areaType":4,"areaCode":120101,"userRoleId":null,"role":"预览菌","roles":null,"permissions":null},
         // {"id":54,"loginName":"1001","loginPass":"fb461bd5feb1df396a825ecdec4576b3","nickName":"代理一号","salt":"fc713d67b92f471c8f669ad0e86695cf","areaType":4,"areaCode":241204,"userRoleId":null,"role":"代理商","roles":null,"permissions":null}
       ],
-      dialogSubmitLoading: false,
+      
+    }
+  }
+  // 对于默认方法不满足需求的可在子组件内自定义方法，调用此方法进行更新数据展示（尽量规避此操作）
+  // 没有解决办法时使用此方法进行展示数据更新
+  updateHack = dataObj => {
+    // dataObj  需要更新的数据对象
+    if(dataObj){
+      let {
+        total, 
+        pageLoading, 
+        dialogShow, 
+        currentDialog, 
+        dialogSubmitLoading, 
+        pageData
+      } = dataObj
+      let current = dataObj[defaultCurrentKey]
+      let size = dataObj[defaultPageSizeKey]
+      let obj = {}
+      if(current) obj[defaultCurrentKey] = current
+      if(size) obj[defaultPageSizeKey] = size
+      if(total) obj['total'] = total
+      if(pageLoading) obj['pageLoading'] = pageLoading
+      if(dialogShow) obj['dialogShow'] = dialogShow
+      if(currentDialog) obj['currentDialog'] = currentDialog
+      if(dialogSubmitLoading) obj['dialogSubmitLoading'] = dialogSubmitLoading
+      if(pageData) obj['defaultPageSizeKey'] = pageData
+      this.setState(obj)
     }
   }
 
@@ -62,22 +91,43 @@ let Enhance = ComposedComponent => class extends React.Component {
 
   paging = (pager, pagingArguments) => {
     const vm = this
-    console.log('pager: ',pager)
-    console.log('pagingArguments: ',pagingArguments)
+    // 可配置的分页key
+    //    可配置默认当前页和每页个数key
+    //    可自定义当前页和每页个数key
     let current = vm.state[defaultCurrentKey]
     let size = vm.state[defaultPageSizeKey]
+    let defaultPageConfig = {}
     if(pager){
       // 传pager就是翻页,不传的是刷新
       if(pager[defaultCurrentKey]) current = pager[defaultCurrentKey]
       if(pager[defaultPageSizeKey]) size = pager[defaultPageSizeKey]
     }
-    
-    let [
+    defaultPageConfig = {
+      [defaultCurrentKey]: current,
+      [defaultPageSizeKey]: size
+    }
+    let _pageConfig = deepcopy(defaultPageConfig)
+    let {
       params,
-      config
-    ] = pagingArguments
-    console.log('current: ',current)
-    console.log('size: ',size)
+      config,
+      pageConfig
+    } = pagingArguments
+    if(pageConfig){
+      let {
+        currentKey,
+        pageSizeKey
+      } = pageConfig
+      if(currentKey){
+        _pageConfig[currentKey] = current
+        delete _pageConfig[defaultCurrentKey]
+      }
+      if(pageSizeKey){
+        _pageConfig[pageSizeKey] = size
+        delete _pageConfig[defaultPageSizeKey]
+      }
+    }
+    // 可配置的分页key   end
+    console.log('_pageConfig: ',_pageConfig)
     vm.setState({
       [defaultCurrentKey]: current,
       [defaultPageSizeKey]: size,
@@ -148,6 +198,7 @@ let Enhance = ComposedComponent => class extends React.Component {
       closeModal={this.closeModal}
       resetDialogForm={this.resetDialogForm}
       submitDialogForm={this.submitDialogForm}
+      updateHack={this.updateHack}
       {...this.props}
       {...this.state}
     />

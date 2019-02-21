@@ -1,13 +1,13 @@
 import React from 'react'
 import { Pagination, Button } from 'antd'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
-// 分页组件只用管展示即可
+
+// 分页组件只用关注展示即可，自定义的当前页和每页个数key隐式传递
 class Paging extends React.Component {
 
-  currentChange = current =>{
-    const { currentKey = defaultCurrentKey } = this.props
+  currentChange = current => {
     const pager = {
-      [currentKey]: current
+      [defaultCurrentKey]: current
     }
     this.paging(pager)
   }
