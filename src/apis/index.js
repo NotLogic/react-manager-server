@@ -4,6 +4,7 @@ import systemUser from './systemUser'
 import role from './role'
 // 权限列表
 import authority from './authority'
+import submission from './submission'
 // 退出登录
 const logout = {
   params: {
@@ -23,5 +24,6 @@ const apis = {
   systemUser,
   role,
   authority,
+  submission
 }
 export default apis

@@ -8,6 +8,12 @@ export function deepcopy (source) {
   }
   return sourceCopy;
 }
-// export function 
+export function replacePathParams(url='', obj={}) {
+  let ret = '' + url
+  for(let key in obj){
+    ret = ret.replace(`{${key}}`, obj[key])
+  }
+  return ret
+}
 // export function 
 // export function 

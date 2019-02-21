@@ -44,7 +44,6 @@ class Paging extends React.Component {
       display: 'flex',
       justifyContent: contentAlign,
     }
-    total = 100
     return (
       <div className="clearfix" style={ wrapperStyles }>
         <Button
