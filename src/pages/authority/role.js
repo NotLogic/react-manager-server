@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, Table ,Form, Input, Modal, Row, Col} from 'antd'
 import Paging from '@/components/paging'
 import enhancePage from '@/high-components/page'
+import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
+import apis from '@/apis/role'
 
 class MyFormDialog extends React.Component {
   handleSelectChange = (value) => {
@@ -77,9 +79,11 @@ class MyFormDialog extends React.Component {
 }
 const FormDialog = Form.create()(MyFormDialog)
 
+// 当前组件中对特殊情况做二次处理
 class Role extends React.Component {
   constructor(props) {
     super(props)
+    // 
     this.state = {
       columns: [
         {
@@ -124,11 +128,30 @@ class Role extends React.Component {
       // 
     }
   }
+  // 
+  getPagingArguments = ( ) => {
+    let {
+      params={},
+      config={}
+    } = apis.dataGrid
+    // 处理params为符合需求的请求参数
+    // 自定义key 
+    // nowpage  pagesize
+    // currentKey pageSizeKey
+    // {
+    //   currentKey: 'nowpage',
+    //   pageSizeKey: 'pagesize',
+    // }
+
+    // 额外的提交字段
+    return [
+      params,
+      config
+    ]
+  }
 
   render () {
     let {
-      current,
-      size,
       total,
       pageLoading,
       pageData,
@@ -142,9 +165,11 @@ class Role extends React.Component {
       resetDialogForm,
       submitDialogForm,
     } = this.props
+    let current = this.props[defaultCurrentKey]
+    let size = this.props[defaultPageSizeKey]
     const {
       columns
-    } = this.state
+    } = this.state    
     return (
       <div>
         <div style={{marginBottom: '16px'}}>
@@ -163,6 +188,7 @@ class Role extends React.Component {
           total={total}
           pageLoading={pageLoading}
           paging={paging}
+          pagingArguments={this.getPagingArguments()}
         />
         <FormDialog
           dialogShow={dialogShow}

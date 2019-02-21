@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal } from 'antd'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
+import request from '@/plugins/axios'
 
 // 此高阶组件用于处理公共的页面请求处理
 // 此高阶组件会使用到redux的state，需要在connect的内层
@@ -23,11 +24,11 @@ let Enhance = ComposedComponent => class extends React.Component {
       currentDialog: 'add',
       pageData: [
         // 角色列表
-        {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
-        {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
-        {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
-        {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
-        {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"},
+        // {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
+        // {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
+        // {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
+        // {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
+        // {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"},
         // 权限列表
         // {"id":238,"permValue":"ad","parentValue":null,"permName":"广告","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:15:47","modifyTime":"2018-10-26 10:15:47"},
         // {"id":239,"permValue":"adviceBack","parentValue":null,"permName":"意见反馈","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:16:45","modifyTime":"2018-10-26 10:16:45"},
@@ -59,9 +60,32 @@ let Enhance = ComposedComponent => class extends React.Component {
     return ret
   }
 
-  paging = (pager) => {
+  paging = (pager, pagingArguments) => {
     const vm = this
     console.log('pager: ',pager)
+    console.log('pagingArguments: ',pagingArguments)
+    let current = vm.state[defaultCurrentKey]
+    let size = vm.state[defaultPageSizeKey]
+    if(pager){
+      // 传pager就是翻页,不传的是刷新
+      if(pager[defaultCurrentKey]) current = pager[defaultCurrentKey]
+      if(pager[defaultPageSizeKey]) size = pager[defaultPageSizeKey]
+    }
+    
+    let [
+      params,
+      config
+    ] = pagingArguments
+    console.log('current: ',current)
+    console.log('size: ',size)
+    vm.setState({
+      [defaultCurrentKey]: current,
+      [defaultPageSizeKey]: size,
+    })
+    return
+    request(params, config).then(res=>{
+      console.log(res)
+    })
   }
 
   saveFormRef = (formRef) => {

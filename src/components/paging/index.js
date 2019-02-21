@@ -1,17 +1,10 @@
 import React from 'react'
 import { Pagination, Button } from 'antd'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
-
+// 分页组件只用管展示即可
 class Paging extends React.Component {
-  constructor(props){
-    super(props)
 
-    this.currentChange = this.currentChange.bind(this)
-    this.pageSizeChange = this.pageSizeChange.bind(this)
-    this.paging = this.paging.bind(this)
-  }
-
-  currentChange(current){
+  currentChange = current =>{
     const { currentKey = defaultCurrentKey } = this.props
     const pager = {
       [currentKey]: current
@@ -19,39 +12,39 @@ class Paging extends React.Component {
     this.paging(pager)
   }
   
-  pageSizeChange(current, pageSize){
-    // 自定义的当前页的key存在就取传的key，不存在就取默认key
-    // 自定义的每页数量的key存在就取传的key，不存在就取默认key
-    const { 
-      currentKey = defaultCurrentKey,
-      pageSizeKey = defaultPageSizeKey
-    } = this.props
+  pageSizeChange = (current, size) => {
     const pager = {
-      [currentKey]: current,
-      [pageSizeKey]: pageSize,
+      [defaultCurrentKey]: current,
+      [defaultPageSizeKey]: size,
     }
     this.paging(pager)
   }
-  paging(pager){
-    const { paging } = this.props
-    paging(pager)
+  paging = pager => {
+    const {
+      paging,
+      pagingArguments
+    } = this.props
+    paging(pager,pagingArguments)
   }
 
   render () {
-    const {
-      current=1,
-      size=10,
+    let {
       total=0,
       pageSizeOptions=['10', '20', '30', '40'],
       pageLoading=false,
       align='right'
     } = this.props
+    
+    let current = this.props[defaultCurrentKey] || 1
+    let size = this.props[defaultPageSizeKey] || 10
+
     let contentAlign = align=='left' ? 'flex-start' : ( align=='right' ? 'flex-end' : 'center' )
     let wrapperStyles = {
       padding: '10px',
       display: 'flex',
       justifyContent: contentAlign,
     }
+    total = 100
     return (
       <div className="clearfix" style={ wrapperStyles }>
         <Button
