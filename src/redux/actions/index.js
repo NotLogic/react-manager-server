@@ -4,6 +4,7 @@ import jsCookie from 'js-cookie'
 import {sysUserKey, sessionKey} from '@/libs/config'
 import {deepcopy} from '@/libs/utils'
 import apis from '@/apis'
+import LoginPack from '@/libs/locale-provider/zh_CN/login'
 
 // 通过使用指定的中间件，action创建函数除了返回action对象外，还可以返回函数。这时，这个action创建函数就成了thunk
 // 标准的做法是使用redux-thunk中间件
@@ -25,7 +26,7 @@ export const submitLogin = (loginParams, authParams) => dispatch => {
         let {menuList,permissionList} = res2.data
         if(!menuList.length || !permissionList.length){
           // 无权访问
-          reject({noAuth: true})
+          reject(LoginPack.noAuth)
         }
         dispatch(isLogined({
           isLogining: false,
@@ -37,14 +38,14 @@ export const submitLogin = (loginParams, authParams) => dispatch => {
         resolve()
       }).catch(() => {
         //  授权失败
-        reject({getAuthError: true})
+        reject(LoginPack.getAuthError)
       })
     }).catch(()=>{
       dispatch(isLogined({
         isLogining: false,
       }))
       // 登录失败
-      reject({isLoginError: true})
+      reject(LoginPack.error)
     })
   })
 }
@@ -82,18 +83,23 @@ function logout () {
   return action
 }
 
-// 获取侧边栏菜单
-export const requestMenuData = () => dispatch => {
+// 获取权限
+export const requestPermissionData = () => dispatch => {
   return new Promise(function(resolve, reject){
     const {params} = apis.getMenu
     // 设置缓存，如果缓存中有从缓存拿(生产环境中是需要刷新页面重新获取的，整个判断都是不需要的)
     if(sessionStorage.menuData){
-      const menuData = JSON.parse(sessionStorage.menuData)
+      const result = resultPermissionData(JSON.parse(sessionStorage.menuData))
+      const {
+        menuData,
+        permissionList
+      } = result
       const res = {
         code: 1,
         data: menuData
       }
       dispatch(setMenuData(menuData))
+      dispatch(setPermissionList(permissionList))
       resolve(res)
       return
     }
@@ -106,27 +112,37 @@ export const requestMenuData = () => dispatch => {
         {"id":176,"permValue":"post_index:dataGrid","parentValue":"post_index","permName":"列表","parentName":"动态管理","permType":2,"isLeaf":1,"createTime":"2018-10-11 12:07:37","modifyTime":"2018-10-11 12:07:37"},{"id":177,"permValue":"post_index:search","parentValue":"post_index","permName":"搜索","parentName":"动态管理","permType":2,"isLeaf":1,"createTime":"2018-10-11 12:07:32","modifyTime":"2018-10-11 12:07:32"},{"id":178,"permValue":"post_index:edit","parentValue":"post_index","permName":"修改","parentName":"动态管理","permType":2,"isLeaf":1,"createTime":"2018-10-11 12:07:28","modifyTime":"2018-10-11 12:07:28"},{"id":179,"permValue":"post_index:delete","parentValue":"post_index","permName":"删除","parentName":"动态管理","permType":2,"isLeaf":1,"createTime":"2018-10-11 12:07:23","modifyTime":"2018-10-11 12:07:23"},{"id":180,"permValue":"post_index","parentValue":"post","permName":"动态管理","parentName":"所有动态","permType":1,"isLeaf":1,"createTime":"2018-10-11 12:07:11","modifyTime":"2018-10-11 12:07:11"},{"id":181,"permValue":"ad_index:clearCache","parentValue":"ad_index","permName":"清除缓存","parentName":"广告管理","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:53:30","modifyTime":"2018-09-03 11:53:30"},{"id":182,"permValue":"gover:clearCache","parentValue":"gover","permName":"清除缓存","parentName":"政务管理","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:54:38","modifyTime":"2018-09-03 11:54:38"},{"id":183,"permValue":"policy:clearCache","parentValue":"policy","permName":"清除缓存","parentName":"招商","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:55:15","modifyTime":"2018-09-03 11:55:15"},{"id":184,"permValue":"softtext:clearCache","parentValue":"softtext","permName":"清除缓存","parentName":"软文管理","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:55:49","modifyTime":"2018-09-03 11:55:49"},{"id":185,"permValue":"agent:clearCache","parentValue":"agent","permName":"清除缓存","parentName":"代理商","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:57:33","modifyTime":"2018-09-03 11:57:33"},{"id":186,"permValue":"workClass:clearCache","parentValue":"workClass","permName":"清除缓存","parentName":"办事分类","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:58:00","modifyTime":"2018-09-03 11:58:00"},{"id":187,"permValue":"workMatter:clearCache","parentValue":"workMatter","permName":"清除缓存","parentName":"办事事项","permType":2,"isLeaf":1,"createTime":"2018-09-03 11:58:34","modifyTime":"2018-09-03 11:58:34"},{"id":190,"permValue":"hometown:dataGrid","parentValue":"hometown","permName":"列表","parentName":"用户家乡分布","permType":2,"isLeaf":1,"createTime":"2018-09-05 12:13:31","modifyTime":"2018-09-05 12:13:31"},{"id":191,"permValue":"postUser","parentValue":"user","permName":"WEB用户","parentName":"用户管理","permType":1,"isLeaf":1,"createTime":"2018-09-05 15:35:18","modifyTime":"2018-09-05 15:35:18"},{"id":192,"permValue":"app:dataGrid","parentValue":"postUser","permName":"列表","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-06 09:51:23","modifyTime":"2018-09-06 09:51:23"},{"id":193,"permValue":"app:add","parentValue":"postUser","permName":"新增WEB用户","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-06 10:54:29","modifyTime":"2018-09-06 10:54:29"},{"id":194,"permValue":"app:postDelete","parentValue":"postUser","permName":"删除","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:10:25","modifyTime":"2019-01-03 18:10:25"},{"id":195,"permValue":"app:edit","parentValue":"postUser","permName":"编辑","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-06 10:51:08","modifyTime":"2018-09-06 10:51:08"},{"id":196,"permValue":"app:search","parentValue":"postUser","permName":"搜索","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-06 10:51:01","modifyTime":"2018-09-06 10:51:01"},{"id":197,"permValue":"post_index:add","parentValue":"postUser","permName":"发帖","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-05 17:12:42","modifyTime":"2018-09-05 17:12:42"},{"id":199,"permValue":"hometown","parentValue":"count","permName":"用户家乡分布","parentName":"统计","permType":1,"isLeaf":1,"createTime":"2018-09-06 11:12:00","modifyTime":"2018-09-06 11:12:00"},{"id":201,"permValue":"count","parentValue":"0","permName":"统计","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-09-06 11:21:55","modifyTime":"2018-09-06 11:21:55"},{"id":202,"permValue":"message:dataGrid","parentValue":"postUser","permName":"消息","parentName":"WEB用户","permType":2,"isLeaf":1,"createTime":"2018-09-06 12:32:34","modifyTime":"2018-09-06 12:32:34"},{"id":203,"permValue":"workMatter:import","parentValue":"workMatter","permName":"导入办事事项","parentName":"办事事项","permType":2,"isLeaf":1,"createTime":"2018-09-26 14:33:27","modifyTime":"2018-09-26 14:33:27"},{"id":204,"permValue":"work","parentValue":null,"permName":"办事管理","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-10 16:44:00","modifyTime":"2018-10-10 16:44:00"},{"id":205,"permValue":"guide","parentValue":null,"permName":"政务管理","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-10 16:44:39","modifyTime":"2018-10-10 16:44:39"},{"id":206,"permValue":"template","parentValue":null,"permName":"模板/测试","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-10 16:45:50","modifyTime":"2018-10-10 16:45:50"},{"id":207,"permValue":"ad","parentValue":null,"permName":"广告管理","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-10 17:53:43","modifyTime":"2018-10-10 17:53:43"},{"id":208,"permValue":"adviceBack","parentValue":null,"permName":"意见反馈","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-10 17:54:02","modifyTime":"2018-10-10 17:54:02"},{"id":209,"permValue":"service","parentValue":null,"permName":"服务","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-12 09:53:03","modifyTime":"2018-10-12 09:53:03"},{"id":210,"permValue":"serviceNumber","parentValue":"service","permName":"服务","parentName":"服务","permType":1,"isLeaf":1,"createTime":"2018-10-12 10:46:33","modifyTime":"2018-10-12 10:46:33"},{"id":211,"permValue":"serviceNumber:dataGrid","parentValue":"serviceNumber","permName":"列表","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-12 10:46:37","modifyTime":"2018-10-12 10:46:37"},{"id":212,"permValue":"serviceNumber:add","parentValue":"serviceNumber","permName":"新增","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-12 10:46:40","modifyTime":"2018-10-12 10:46:40"},{"id":213,"permValue":"serviceNumber:edit","parentValue":"serviceNumber","permName":"编辑","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-12 10:46:44","modifyTime":"2018-10-12 10:46:44"},{"id":214,"permValue":"serviceNumber:delete","parentValue":"serviceNumber","permName":"删除","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-12 10:46:47","modifyTime":"2018-10-12 10:46:47"},{"id":215,"permValue":"serviceNumber:search","parentValue":"serviceNumber","permName":"搜索","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-12 10:46:26","modifyTime":"2018-10-12 10:46:26"},{"id":216,"permValue":"serviceNumber:preview","parentValue":"serviceNumber","permName":"查看投稿","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-15 15:42:23","modifyTime":"2018-10-15 15:42:23"},{"id":217,"permValue":"serviceNumber:submission","parentValue":"serviceNumber","permName":"投稿","parentName":"服务","permType":2,"isLeaf":1,"createTime":"2018-10-15 15:48:47","modifyTime":"2018-10-15 15:48:47"},{"id":221,"permValue":"serviceClassify","parentValue":"service","permName":"服务分类","parentName":"服务","permType":1,"isLeaf":1,"createTime":"2018-10-22 14:19:36","modifyTime":"2018-10-22 14:19:36"},{"id":222,"permValue":"serviceClassify:add","parentValue":"serviceClassify","permName":"新增","parentName":"服务分类","permType":2,"isLeaf":1,"createTime":"2018-10-22 14:17:51","modifyTime":"2018-10-22 14:17:51"},{"id":223,"permValue":"serviceClassify:edit","parentValue":"serviceClassify","permName":"编辑","parentName":"服务分类","permType":2,"isLeaf":1,"createTime":"2018-10-22 14:18:11","modifyTime":"2018-10-22 14:18:11"},{"id":224,"permValue":"serviceClassify:delete","parentValue":"serviceClassify","permName":"删除","parentName":"服务分类","permType":2,"isLeaf":1,"createTime":"2018-10-22 14:18:26","modifyTime":"2018-10-22 14:18:26"},{"id":225,"permValue":"serviceClassify:dataGrid","parentValue":"serviceClassify","permName":"列表","parentName":"服务分类","permType":2,"isLeaf":1,"createTime":"2018-10-22 14:18:45","modifyTime":"2018-10-22 14:18:45"},{"id":226,"permValue":"serviceClassify:search","parentValue":"serviceClassify","permName":"搜索","parentName":"服务分类","permType":2,"isLeaf":1,"createTime":"2018-10-22 17:23:34","modifyTime":"2018-10-22 17:23:34"},{"id":227,"permValue":"submission","parentValue":"service","permName":"投稿","parentName":"服务","permType":1,"isLeaf":1,"createTime":"2018-10-23 09:43:15","modifyTime":"2018-10-23 09:43:15"},{"id":228,"permValue":"submission:add","parentValue":"submission","permName":"新增","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 09:45:29","modifyTime":"2018-10-23 09:45:29"},{"id":229,"permValue":"submission:delete","parentValue":"submission","permName":"删除","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 09:45:48","modifyTime":"2018-10-23 09:45:48"},{"id":230,"permValue":"submission:edit","parentValue":"submission","permName":"编辑","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 09:46:00","modifyTime":"2018-10-23 09:46:00"},{"id":231,"permValue":"submission:dataGrid","parentValue":"submission","permName":"列表","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 09:46:27","modifyTime":"2018-10-23 09:46:27"},{"id":232,"permValue":"submission:search","parentValue":"submission","permName":"搜索","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 09:47:06","modifyTime":"2018-10-23 09:47:06"},
         {"id":233,"permValue":"submission:examine","parentValue":"submission","permName":"审核","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 14:46:50","modifyTime":"2018-10-23 14:46:50"},{"id":234,"permValue":"submission:push","parentValue":"submission","permName":"推送","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-23 18:10:18","modifyTime":"2018-10-23 18:10:18"},{"id":235,"permValue":"serviceNumber:push","parentValue":"serviceNumber","permName":"推送","parentName":"投稿","permType":2,"isLeaf":1,"createTime":"2018-10-24 15:02:36","modifyTime":"2018-10-24 15:02:36"},{"id":236,"permValue":"userCount","parentValue":"count","permName":"用户统计","parentName":"统计","permType":1,"isLeaf":1,"createTime":"2019-01-03 18:04:14","modifyTime":"2019-01-03 18:04:14"},{"id":237,"permValue":"userCount:dataGrid","parentValue":"userCount","permName":"列表","parentName":"用户统计","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:04:39","modifyTime":"2019-01-03 18:04:39"},{"id":238,"permValue":"userSubmission","parentValue":"service","permName":"用户投稿","parentName":"服务","permType":1,"isLeaf":1,"createTime":"2019-01-03 18:05:11","modifyTime":"2019-01-03 18:05:11"},{"id":239,"permValue":"userSubmission:add","parentValue":"userSubmission","permName":"新增","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:06:08","modifyTime":"2019-01-03 18:06:08"},{"id":240,"permValue":"userSubmission:edit","parentValue":"userSubmission","permName":"编辑","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:06:24","modifyTime":"2019-01-03 18:06:24"},{"id":241,"permValue":"userSubmission:delete","parentValue":"userSubmission","permName":"删除","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:06:39","modifyTime":"2019-01-03 18:06:39"},{"id":242,"permValue":"userSubmission:search","parentValue":"userSubmission","permName":"搜索","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:06:58","modifyTime":"2019-01-03 18:06:58"},{"id":243,"permValue":"userSubmission:dataGrid","parentValue":"userSubmission","permName":"列表","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:07:16","modifyTime":"2019-01-03 18:07:16"},{"id":244,"permValue":"userSubmission:push","parentValue":"userSubmission","permName":"推送","parentName":"用户投稿","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:07:34","modifyTime":"2019-01-03 18:07:34"},{"id":245,"permValue":"app:delete","parentValue":"app","permName":"删除","parentName":"APP用户","permType":2,"isLeaf":1,"createTime":"2019-01-03 18:11:03","modifyTime":"2019-01-03 18:11:03"}
       ]
-      const menuData = resultMenuData(TEST_MENU_DATA)
+      const result = resultPermissionData(TEST_MENU_DATA)
+      const {
+        menuData,
+        permissionList
+      } = result
       const res = {
         code: 1,
         data: menuData
       }
       dispatch(setMenuData(menuData))
+      dispatch(setPermissionList(permissionList))
       resolve(res)
       return
     }    
     http(params).then(res=>{
       if(res.code==1){
-        const menuData = resultMenuData(res.data)
+        const result = resultPermissionData(res.data)
+        const {
+          menuData,
+          permissionList
+        } = result
         sessionStorage.menuData = JSON.stringify(menuData)
         dispatch(setMenuData(menuData))
+        dispatch(setPermissionList(permissionList))
         resolve(res)
       }
     }).catch(err=>reject(err))
   })
 }
-function resultMenuData (data) {
-  let parentMenuData=[],childrenMenuData=[]
+function resultPermissionData (data) {
+  let menuData=[],childrenMenuData=[],permissionList=[]
   data.forEach(item=>{
     // permTypeMap: { 
     //   1: '菜单',
@@ -140,26 +156,33 @@ function resultMenuData (data) {
     //   '1': '是'
     // },
     let _item = deepcopy(item)
-    let {id, permType, isLeaf, permName, permValue, parentName, parentValue} = item
+    let { permType, isLeaf, permValue } = item
     // 筛选所有的菜单： permType=1 的；isLeaf=0父菜单，isLeaf=1子菜单
     // 筛选所有的按钮： permType=2 的；所有的isLeaf=1
     if(permType==1){
       if(isLeaf==0){
         _item.children = []
-        parentMenuData.push(_item)
+        menuData.push(_item)
       }else if(isLeaf==1){
         childrenMenuData.push(_item)
       }
+    }else //  非菜单的权限
+    // if(permType==2)  // 所有按钮的权限
+    {      
+      permissionList.push(permValue)
     }
   })
   childrenMenuData.forEach(child=>{
-    parentMenuData.forEach(parent=>{
+    menuData.forEach(parent=>{
       if(child.parentValue == parent.permValue){
         parent.children.push(child)
       }
     })
   })
-  return parentMenuData
+  return {
+    menuData,
+    permissionList
+  }
 }
 function setMenuData(data=[]) {
   let action = {
@@ -169,39 +192,12 @@ function setMenuData(data=[]) {
   return action
 }
 
-// 页面列表
-export const changePager = (pager) => dispatch => {
-  const {current, size} = pager
-  if(current){
-
+function setPermissionList(data=[]){
+  let action = {
+    type: types.SET_PERMISSION_LIST,
+    permissionList: data
   }
-  if(size){
-
-  }
-}
-export const paging = (params) => dispatch => {
-  dispatch({
-    type: types.SET_PAGE_DATA,
-    pageLoading: true
-  })
-  return new Promise(function(resolve, reject){
-    http(params).then(res=>{
-      dispatch({
-        type: types.SET_PAGE_DATA,
-        data: res.data,
-        pageLoading: true,
-        current: res.current,
-        total: res.total
-      })
-      resolve(res)
-    }).catch(err=>{
-      dispatch({
-        type: types.SET_PAGE_DATA,
-        pageLoading: true
-      })
-      reject(err)
-    })
-  })
+  return action
 }
 
 export default {

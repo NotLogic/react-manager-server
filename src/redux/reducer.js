@@ -42,19 +42,14 @@ function menuData (previousState=[], action) {
       return previousState
   }
 }
-function paging(previousState={}, action){
-  const { current, size, data, total, pageSizeOptions, pageLoading } = action
+
+function permissionList(previousState=[], action) {
   switch(action.type){
-    case types.SET_PAGE_DATA :
-      return {
+    case types.SET_PERMISSION_LIST :
+      return [
         ...previousState,
-        current,
-        size,
-        total,
-        pageSizeOptions,
-        pageLoading,
-        data,
-      }
+        ...action.permissionList
+      ]
     default :
       return previousState
   }
@@ -71,7 +66,7 @@ function paging(previousState={}, action){
 const rootReducer = combineReducers({
   login,
   menuData,
-  paging,
+  permissionList
 })
 
 export default rootReducer

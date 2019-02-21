@@ -211,7 +211,9 @@ class SystemUser extends React.Component {
       closeModal,
       resetDialogForm,
       submitDialogForm,
+      permissionList
     } = vm.props
+    console.log('permissionList: ',permissionList)
     const {
       columns,
       selectedRowKeys
@@ -263,6 +265,6 @@ class SystemUser extends React.Component {
   }
 }
 const mapStateToProps = state => ({
-  
+  permissionList: state.permissionList
 })
 export default connect(mapStateToProps)(enhancePage(SystemUser))

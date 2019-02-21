@@ -2,8 +2,9 @@ import React from 'react'
 import { Modal } from 'antd'
 import {defaultCurrentKey, defaultPageSizeKey} from '@/libs/config'
 
+// 此高阶组件用于处理公共的页面请求处理
 // 此高阶组件会使用到redux的state，需要在connect的内层
-
+// todo: 如果此高阶组件中的方法不能满足需求该怎么办
 let Enhance = ComposedComponent => class extends React.Component {
   constructor(props){
     super(props)
@@ -22,11 +23,11 @@ let Enhance = ComposedComponent => class extends React.Component {
       currentDialog: 'add',
       pageData: [
         // 角色列表
-        // {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
-        // {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
-        // {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
-        // {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
-        // {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"}
+        {"id":1,"roleName":"管理员","roleValue":"admin","roleDesc":"拥有所有权限","createTime":"2018-08-02 11:20:40","modifyTime":"2018-08-02 11:20:40"},
+        {"id":9,"roleName":"开发","roleValue":"developer","roleDesc":"开发人员","createTime":"2018-09-04 14:48:08","modifyTime":"2018-09-04 14:48:08"},
+        {"id":10,"roleName":"预览菌","roleValue":"preview","roleDesc":"只可以查看搜索","createTime":"2018-09-05 15:44:04","modifyTime":"2018-09-05 15:44:04"},
+        {"id":12,"roleName":"代理商","roleValue":"agent","roleDesc":"代理商选择的角色","createTime":"2018-09-26 11:16:50","modifyTime":"2018-09-26 11:16:50"},
+        {"id":14,"roleName":"测试回显","roleValue":"test","roleDesc":"测试回显异常","createTime":"2018-09-26 15:12:43","modifyTime":"2018-09-26 15:12:43"},
         // 权限列表
         // {"id":238,"permValue":"ad","parentValue":null,"permName":"广告","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:15:47","modifyTime":"2018-10-26 10:15:47"},
         // {"id":239,"permValue":"adviceBack","parentValue":null,"permName":"意见反馈","parentName":null,"permType":1,"isLeaf":0,"createTime":"2018-10-26 10:16:45","modifyTime":"2018-10-26 10:16:45"},
@@ -37,7 +38,7 @@ let Enhance = ComposedComponent => class extends React.Component {
         // {"id":67,"permValue":"adviceBack_index:edit","parentValue":"adviceBack_index","permName":"编辑","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:50","modifyTime":"2018-08-23 12:29:50"},
         // {"id":68,"permValue":"adviceBack_index:search","parentValue":"adviceBack_index","permName":"搜索","parentName":"反馈基础数据","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:54","modifyTime":"2018-08-23 12:29:54"},
         // {"id":28,"permValue":"adviceContent","parentValue":"adviceBack","permName":"反馈内容","parentName":"意见反馈","permType":1,"isLeaf":1,"createTime":"2018-08-15 19:49:48","modifyTime":"2018-08-15 19:49:48"},
-        // {"id":70,"permValue":"adviceContent:add","parentValue":"adviceContent","permName":"新增","parentName":"反馈内容","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:58","modifyTime":"2018-08-23 12:29:58"}
+        // {"id":70,"permValue":"adviceContent:add","parentValue":"adviceContent","permName":"新增","parentName":"反馈内容","permType":2,"isLeaf":1,"createTime":"2018-08-23 12:29:58","modifyTime":"2018-08-23 12:29:58"},
         // 系统用户列表
         // {"id":10,"loginName":"admin","loginPass":"f866758b07bac11002f1a2c0c72ddce5","nickName":"超级管理员","salt":"8aa8ab1929544c81a6908400b6fd8c2b","areaType":0,"areaCode":0,"userRoleId":null,"role":"管理员","roles":null,"permissions":null},
         // {"id":49,"loginName":"logic","loginPass":"0c2ff7668030a8eb7a4594e6b56455df","nickName":"逻辑","salt":"be095d9898cb4554bc2e28eac68b422b","areaType":0,"areaCode":0,"userRoleId":null,"role":"管理员","roles":null,"permissions":null},
@@ -84,8 +85,8 @@ let Enhance = ComposedComponent => class extends React.Component {
       }
     })
   }
-
-  editRow = (data) => {
+  // 编辑行传入的data需要试经过格式化的用于回显的
+  editRow = data => {
     this.setState({
       currentDialog: 'edit',
       dialogShow: true

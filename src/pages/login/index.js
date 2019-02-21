@@ -8,10 +8,9 @@ import {savePasswordKey} from '@/libs/config'
 import {HOME_PATH} from '@/router/config'
 
 // 引入提示语言包
-import LanguagePack from '@/libs/locale-provider/zh_CN'
-// import LanguagePack from '@/libs/locale-provider/en_US'
+import LoginPack from '@/libs/locale-provider/zh_CN/login'
+// import LoginPack from '@/libs/locale-provider/en_US/login'
 // 登录的提示包
-const LoginPack = LanguagePack.login
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -27,10 +26,10 @@ class Login extends React.Component {
 
     this.loginUrl = 'web/sys/user/login'
     this.getAuth = 'web/sys/perm/shiro/vue'
-    this.loginErrTxt = LoginPack.error
-    this.noAuthTxt = LoginPack.noAuth
-    this.getAuthError = LoginPack.getAuthError
-    this.loginSuccess = LoginPack.success
+    // this.loginErrTxt = LoginPack.error
+    // this.noAuthTxt = LoginPack.noAuth
+    // this.getAuthError = LoginPack.getAuthError
+    // this.loginSuccess = LoginPack.success
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.updateRememberMe = this.updateRememberMe.bind(this)
@@ -82,19 +81,12 @@ class Login extends React.Component {
       url: vm.getAuth
     }
     // 
-    submitLogin(loginParams, authParams).then(() =>{
-      // 登陆成功
-      message.success(vm.loginSuccess)
+    submitLogin(loginParams, authParams).then(successMessage =>{
+      message.success(successMessage)
       history.push(HOME_PATH)
-    }).catch(err=>{
-      if(err.isLoginError){
-        message.error(vm.loginErrTxt)
-      }else if(err.getAuthError){
-        message.error(vm.getAuthError)
-      }else if(err.noAuth){
-        message.error(vm.noAuthTxt)
-      }
-    })
+    }).catch(errMessage=>
+      message.error(errMessage)
+    )
   }
 
   handleSubmit(e){

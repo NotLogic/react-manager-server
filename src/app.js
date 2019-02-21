@@ -7,16 +7,16 @@ import { HOME_PATH } from '@/router/config'
 import menuConfig from '@/router/config/menuConfig'
 import Home from '@/pages/home'
 import {connect} from 'react-redux'
-import {requestMenuData} from '@/redux/actions'
+import {requestPermissionData} from '@/redux/actions'
 
 const {Header, Footer, Sider, Content} = Layout
 
 class App extends React.Component {
   componentWillMount(){
-    const {requestMenuData, menuData} = this.props
+    const {requestPermissionData, menuData} = this.props
     // 请求侧边菜单数据
     if(!menuData.length){
-      requestMenuData()
+      requestPermissionData()
     }
   }
 
@@ -59,7 +59,7 @@ const mapStateToProps = state => ({
   menuData: state.menuData,
 })
 const mapDispatchToProps = {
-  requestMenuData
+  requestPermissionData
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
