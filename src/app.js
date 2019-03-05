@@ -46,7 +46,7 @@ class App extends React.Component {
                 )}
               </Switch>
             </Content>
-            <Footer style={{backgroundColor: '#f5f7f9',textAlign: 'center' }}>Copyright © 深圳市拉呱科技有限公司版权所有</Footer>
+            <Footer style={{backgroundColor: '#f5f7f9',textAlign: 'center' }}>Copyright © 阿斯蒂芬规划局版权所有</Footer>
           </Layout>
         </Layout>
       </div>
