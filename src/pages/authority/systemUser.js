@@ -213,7 +213,6 @@ class SystemUser extends React.Component {
       submitDialogForm,
       permissionList
     } = vm.props
-    console.log('permissionList: ',permissionList)
     const {
       columns,
       selectedRowKeys

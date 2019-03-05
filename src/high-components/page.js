@@ -165,12 +165,21 @@ let Enhance = ComposedComponent => class extends React.Component {
       })
     }
     // 编辑行传入的data需要试经过格式化的用于回显的
-    editRow = data => {
+    editRow = ( data = {} ) => {
       this.setState({
         currentDialog: 'edit',
         dialogShow: true
       })
-      this.formRef.props.form.setFieldsValue(data)
+      let _data = {}
+      // 编辑行时统一将number类型转为string 
+      // 这样做是为了使用map对象作为循环数据进行循环输出Select的Option,因为键名为数字取到的值类型始终为string
+      // 否则需要专门写一个数组去作为循环数据
+      // 使用数据类型转换或者额外写用于循环的数组请根据实际项目的需求决定（后端是否对提交数据的数据类型做严格限定）
+      for(let key in data){
+        let val = data[key]
+        _data[key] = typeof(val) == 'number' ? val.toString() : val
+      }
+      this.formRef.props.form.setFieldsValue(_data)
     }
 
     closeModal = () => {
