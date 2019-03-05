@@ -26,10 +26,6 @@ class Login extends React.Component {
 
     this.loginUrl = 'web/sys/user/login'
     this.getAuth = 'web/sys/perm/shiro/vue'
-    // this.loginErrTxt = LoginPack.error
-    // this.noAuthTxt = LoginPack.noAuth
-    // this.getAuthError = LoginPack.getAuthError
-    // this.loginSuccess = LoginPack.success
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.updateRememberMe = this.updateRememberMe.bind(this)
@@ -61,8 +57,8 @@ class Login extends React.Component {
     let vm = this
     let {history} = vm.props
     setTimeout(function(){
-      message.success(vm.loginSuccess)
-      history.push('/home')
+      message.success(LoginPack.success)
+      history.push(HOME_PATH)
     }, 500)
   }
 
@@ -130,7 +126,7 @@ class Login extends React.Component {
                   getFieldDecorator('loginPass', {
                     rules: [{required: true,message: LoginPack.passwordNull}]
                   })(
-                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.handleSubmit} placeholder={LoginPack.passwordPlaceholder} type="password" />
+                    <Input.Password prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} onPressEnter={this.handleSubmit} placeholder={LoginPack.passwordPlaceholder} type="password" />
                   )
                 }
               </Form.Item>

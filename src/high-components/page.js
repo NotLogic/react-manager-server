@@ -52,142 +52,38 @@ let Enhance = ComposedComponent => class extends React.Component {
         // {"id":55,"loginName":"agent","loginPass":"dd7f4866b9c96aad2866f46e8e27c90f","nickName":"代理商2","salt":"cbbf4835341f45a589b716bbf1554eaf","areaType":4,"areaCode":120101,"userRoleId":null,"role":"预览菌","roles":null,"permissions":null},
         // {"id":54,"loginName":"1001","loginPass":"fb461bd5feb1df396a825ecdec4576b3","nickName":"代理一号","salt":"fc713d67b92f471c8f669ad0e86695cf","areaType":4,"areaCode":241204,"userRoleId":null,"role":"代理商","roles":null,"permissions":null}
         // 投稿
-        {
-          "id": "524381031079936",
-          "serviceNumberId": 65,
-          "userId": null,
-          "content": "大爷下棋，棋法不走寻常路，开眼了，你们看得懂吗？",
-          "status": 0,
-          "verifyTime": null,
-          "createTime": "2019-01-21 17:52:02",
-          "serviceNumberName": null,
-          "userheadPortrait": null,
-          "bgPortrait": null,
-          "userNickName": null,
-          "remake": null,
-          "isfollow": null,
-          "fileManageList": [
-            {
-              "fileType": 2,
-              "filePath": "zsx/web/serviceNumber/2019/1/21/524381031079936/",
-              "fileList": [
-                {
-                  "id": null,
-                  "createTime": null,
-                  "modifyTime": null,
-                  "fileName": "524381047545856.mp4",
-                  "fileSuffix": null,
-                  "fileGroupId": null,
-                  "fileSize": null,
-                  "fileHeight": 624,
-                  "fileWidth": 360,
-                  "fileType": 2,
-                  "fileStyle": 1,
-                  "videoImage": null,
-                  "filePath": null,
-                  "fileSource": null,
-                  "sourceId": null,
-                  "userId": null,
-                  "usePostion": null,
-                  "years": null,
-                  "months": null,
-                  "sort": 0,
-                  "version": null,
-                  "temp_file": null,
-                  "image_temp_name": null,
-                  "video_image_temp_file": null,
-                  "video_temp_file": null,
-                  "fileGroupIds": "524381047545856",
-                  "video_image_temp_name": null,
-                  "fileVideoImage": "524381047545856.jpg"
-                }
-              ],
-              "file_map": null
-            }
-          ]
-        },
-        {
-          "id": "524380830380032",
-          "serviceNumberId": 58,
-          "userId": null,
-          "content": "四川人民的生活",
-          "status": 0,
-          "verifyTime": null,
-          "createTime": "2019-01-21 17:51:07",
-          "serviceNumberName": null,
-          "userheadPortrait": null,
-          "bgPortrait": null,
-          "userNickName": null,
-          "remake": null,
-          "isfollow": null,
-          "fileManageList": [
-            {
-              "fileType": 2,
-              "filePath": "zsx/web/serviceNumber/2019/1/21/524380830380032/",
-              "fileList": [
-                {
-                  "id": null,
-                  "createTime": null,
-                  "modifyTime": null,
-                  "fileName": "524380836708352.mp4",
-                  "fileSuffix": null,
-                  "fileGroupId": null,
-                  "fileSize": null,
-                  "fileHeight": 640,
-                  "fileWidth": 360,
-                  "fileType": 2,
-                  "fileStyle": 1,
-                  "videoImage": null,
-                  "filePath": null,
-                  "fileSource": null,
-                  "sourceId": null,
-                  "userId": null,
-                  "usePostion": null,
-                  "years": null,
-                  "months": null,
-                  "sort": 0,
-                  "version": null,
-                  "temp_file": null,
-                  "image_temp_name": null,
-                  "video_image_temp_file": null,
-                  "video_temp_file": null,
-                  "fileGroupIds": "524380836708352",
-                  "video_image_temp_name": null,
-                  "fileVideoImage": "524380836708352.jpg"
-                }
-              ],
-              "file_map": null
-            }
-          ]
-        },
+        // {"id": "524381031079936","serviceNumberId": 65,"userId": null,"content": "大爷下棋，棋法不走寻常路，开眼了，你们看得懂吗？","status": 0,"verifyTime": null,"createTime": "2019-01-21 17:52:02","serviceNumberName": null,"userheadPortrait": null,"bgPortrait": null,"userNickName": null,"remake": null,"isfollow": null,"fileManageList": [{"fileType": 2,"filePath": "zsx/web/serviceNumber/2019/1/21/524381031079936/","fileList": [{"id": null,"createTime": null,"modifyTime": null,"fileName": "524381047545856.mp4","fileSuffix": null,"fileGroupId": null,"fileSize": null,"fileHeight": 624,"fileWidth": 360,"fileType": 2,"fileStyle": 1,"videoImage": null,"filePath": null,"fileSource": null,"sourceId": null,"userId": null,"usePostion": null,"years": null,"months": null,"sort": 0,"version": null,"temp_file": null,"image_temp_name": null,"video_image_temp_file": null,"video_temp_file": null,"fileGroupIds": "524381047545856","video_image_temp_name": null,"fileVideoImage": "524381047545856.jpg"}],"file_map": null}]},
+        // {"id": "524380830380032","serviceNumberId": 58,"userId": null,"content": "四川人民的生活","status": 0,"verifyTime": null,"createTime": "2019-01-21 17:51:07","serviceNumberName": null,"userheadPortrait": null,"bgPortrait": null,"userNickName": null,"remake": null,"isfollow": null,"fileManageList": [{"fileType": 2,"filePath": "zsx/web/serviceNumber/2019/1/21/524380830380032/","fileList": [{"id": null,"createTime": null,"modifyTime": null,"fileName": "524380836708352.mp4","fileSuffix": null,"fileGroupId": null,"fileSize": null,"fileHeight": 640,"fileWidth": 360,"fileType": 2,"fileStyle": 1,"videoImage": null,"filePath": null,"fileSource": null,"sourceId": null,"userId": null,"usePostion": null,"years": null,"months": null,"sort": 0,"version": null,"temp_file": null,"image_temp_name": null,"video_image_temp_file": null,"video_temp_file": null,"fileGroupIds": "524380836708352","video_image_temp_name": null,"fileVideoImage": "524380836708352.jpg"}],"file_map": null}]},
+        // 
+
       ]
     }
   }
-    // 对于默认方法不满足需求的可在子组件内自定义方法，调用此方法进行更新数据展示（尽量规避此操作）
-    // 没有解决办法时使用此方法进行展示数据更新
+    // 对于默认方法不满足需求的,可在子组件内调用此方法进行数据更新（尽量避免此操作）
     updateHack = dataObj => {
       // dataObj  需要更新的数据对象
-      if (dataObj) {
-        let {
-          total,
-          pageLoading,
-          dialogShow,
-          currentDialog,
-          dialogSubmitLoading,
-          pageData
-        } = dataObj
-        let current = dataObj[defaultCurrentKey]
-        let size = dataObj[defaultPageSizeKey]
-        let obj = {}
-        if (current) obj[defaultCurrentKey] = current
-        if (size) obj[defaultPageSizeKey] = size
-        if (total) obj['total'] = total
-        if (pageLoading) obj['pageLoading'] = pageLoading
-        if (dialogShow) obj['dialogShow'] = dialogShow
-        if (currentDialog) obj['currentDialog'] = currentDialog
-        if (dialogSubmitLoading) obj['dialogSubmitLoading'] = dialogSubmitLoading
-        if (pageData) obj['defaultPageSizeKey'] = pageData
-        this.setState(obj)
+      if (dataObj instanceof Object) {
+        // let {
+        //   total,
+        //   pageLoading,
+        //   dialogShow,
+        //   currentDialog,
+        //   dialogSubmitLoading,
+        //   pageData
+        // } = dataObj
+        // let current = dataObj[defaultCurrentKey]
+        // let size = dataObj[defaultPageSizeKey]
+        // let obj = {}
+        // if (current) obj[defaultCurrentKey] = current
+        // if (size) obj[defaultPageSizeKey] = size
+        // if (total) obj['total'] = total
+        // if (pageLoading) obj['pageLoading'] = pageLoading
+        // if (dialogShow) obj['dialogShow'] = dialogShow
+        // if (currentDialog) obj['currentDialog'] = currentDialog
+        // if (dialogSubmitLoading) obj['dialogSubmitLoading'] = dialogSubmitLoading
+        // if (pageData) obj['pageData'] = pageData
+        // this.setState(obj)
+        this.setState(dataObj)
       }
     }
 
@@ -235,7 +131,7 @@ let Enhance = ComposedComponent => class extends React.Component {
         }
       }
       // 可配置的分页key   end
-      params.params = _pageConfig
+      params.params = {...params.params,..._pageConfig}
       console.log('params: ', params)
       vm.setState({
         [defaultCurrentKey]: current,

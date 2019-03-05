@@ -65,6 +65,8 @@ function isLogined ({ isLogining, sessionId, sysUser, menuList, permissionList }
 export const submitLogout = () => dispatch => {
   return new Promise(function(resolve, reject){
     const {params} = apis.logout
+    // 直接退出
+    return resolve()
     http(params).then(res=>{
       if(res.code==1){
         dispatch(logout)

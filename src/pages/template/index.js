@@ -46,7 +46,7 @@ const FormDialog = Form.create()(
         visible={dialogShow}
         onCancel={closeModal}
         footer={[
-          <Button key="back" onClick={resetDialogForm}>重置</Button>,
+          <Button key="reset" onClick={resetDialogForm}>重置</Button>,
           <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
         ]}
       >

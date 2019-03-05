@@ -6,13 +6,13 @@ import role from './role'
 import authority from './authority'
 import submission from './submission'
 // 退出登录
-const logout = {
+export const logout = {
   params: {
     url: 'web/sys/user/quit'
   },
 }
 // 获取侧边菜单
-const getMenu = {
+export const getMenu = {
   params: {
     url: 'web/sys/perm/dataAllGrid'
   },

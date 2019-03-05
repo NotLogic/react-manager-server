@@ -46,7 +46,7 @@ class MyFormDialog extends React.Component {
       visible={dialogShow}
       onCancel={closeModal}
       footer={[
-        <Button key="back" onClick={resetDialogForm}>重置</Button>,
+        <Button key="reset" onClick={resetDialogForm}>重置</Button>,
         <Button key="submit" type="primary" loading={dialogSubmitLoading} onClick={submitDialogForm}>提交</Button>
       ]}
     >
@@ -157,7 +157,7 @@ class Role extends React.Component {
       submitDialogForm,
       updateHack
     } = this.props
-    console.log('updateHack: ',updateHack)
+    // console.log('updateHack: ',updateHack)
     let current = this.props[defaultCurrentKey]
     let size = this.props[defaultPageSizeKey]
     const {
